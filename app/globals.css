@@ -1,0 +1,338 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base theme variables */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 221 83% 53%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 221 83% 53%;
+  --radius: 0.5rem;
+}
+
+/* Dark theme variables */
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 217.2 91.2% 59.8%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 224.3 76.3% 48%;
+}
+
+/* Apply high contrast to root elements */
+html.high-contrast,
+html.high-contrast body {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+/* High contrast mode - Override all colors */
+.high-contrast {
+  /* Reset all colors to high contrast values */
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 0%;
+  --card-foreground: 0 0% 100%;
+  --primary: 60 100% 50%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 0 0% 0%;
+  --secondary-foreground: 0 0% 100%;
+  --border: 0 0% 100%;
+  --ring: 60 100% 50%;
+
+  /* Force black background and white text */
+  & * {
+    background-color: #000 !important;
+  }
+
+  /* Font Awesome icons */
+  & .fas,
+  & .fab,
+  & .far,
+  & .fa {
+    color: #ffff00 !important;
+    background-color: transparent !important;
+  }
+
+  /* Main content area */
+  & main,
+  & .min-h-screen,
+  & .container,
+  & .bg-\[#F8F8F8\] {
+    background-color: #000 !important;
+  }
+
+  /* Override specific gov.br colors */
+  & .bg-\[\#071D41\],
+  & .bg-\[\#2670E8\],
+  & .bg-\[\#1351B4\],
+  & .bg-white,
+  & .bg-gray-50,
+  & .bg-\[#F8F8F8\] {
+    background-color: #000 !important;
+    border: 1px solid #fff !important;
+  }
+
+  /* Search area and breadcrumbs */
+  & .max-w-md,
+  & nav[aria-label="Trilha de navegação"] {
+    background-color: #000 !important;
+    border: 1px solid #fff !important;
+    padding: 1rem;
+  }
+
+  /* Search input */
+  & input[type="text"] {
+    background-color: #000 !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+  }
+
+  /* System cards */
+  & .group {
+    background-color: #000 !important;
+    border: 2px solid #fff !important;
+
+    & > div {
+      background-color: #000 !important;
+    }
+
+    &:hover {
+      border-color: #ffff00 !important;
+    }
+  }
+
+  /* Card headers and content */
+  & .group .bg-gray-50,
+  & .group .p-5,
+  & .group .border-b {
+    background-color: #000 !important;
+    border-color: #fff !important;
+  }
+
+  /* Text colors */
+  & .text-white,
+  & .text-gray-600,
+  & .text-gray-300,
+  & .text-gray-700,
+  & .text-\[\#071D41\] {
+    color: #fff !important;
+  }
+
+  /* Links and buttons */
+  & a,
+  & button,
+  & [role="button"] {
+    color: #ffff00 !important;
+    text-decoration: underline !important;
+    background-color: #000 !important;
+
+    &:hover {
+      color: #ffffff !important;
+    }
+  }
+
+  /* Action buttons */
+  & .bg-\[\#1351B4\] {
+    background-color: #000 !important;
+    color: #ffff00 !important;
+    border: 2px solid #fff !important;
+
+    &:hover {
+      background-color: #ffff00 !important;
+      color: #000 !important;
+    }
+  }
+
+  /* Focus states */
+  & :focus {
+    outline: 3px solid #ffff00 !important;
+    outline-offset: 2px !important;
+  }
+
+  /* Images and icons */
+  & img,
+  & svg {
+    filter: grayscale(100%) contrast(120%) !important;
+    border: 1px solid #fff !important;
+  }
+
+  /* Borders */
+  & .border,
+  & .border-t,
+  & .border-b,
+  & .border-l,
+  & .border-r,
+  & .border-white\/30,
+  & .border-white\/10,
+  & .border-gray-200,
+  & .border-\[\#1351B4\],
+  & .border-\[\#FFCD07\] {
+    border-color: #fff !important;
+  }
+
+  /* Information blocks */
+  & .bg-white.p-6.mb-8 {
+    background-color: #000 !important;
+    border: 2px solid #fff !important;
+  }
+
+  /* System cards grid container */
+  & .grid {
+    background-color: #000 !important;
+  }
+
+  /* Search icon */
+  & .absolute.left-3 {
+    color: #fff !important;
+  }
+
+  /* No results message */
+  & .text-center.py-10 {
+    background-color: #000 !important;
+    border: 1px solid #fff !important;
+  }
+}
+
+/* Base styles */
+body {
+  font-family: "Rawline", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+    "Helvetica Neue", sans-serif;
+}
+
+/* Transitions */
+.theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Skip links */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  padding: 8px;
+  z-index: 100;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+/* Ícones de redes sociais */
+.fab {
+  font-size: 1.25rem;
+  color: white;
+}
+
+.high-contrast .fab,
+.high-contrast .system-card-header i {
+  color: #ffff00 !important;
+}
+
+/* Ícones de navegação */
+.nav-link i {
+  font-size: 0.875rem;
+}
+
+.fa-chevron-right {
+  font-size: 0.75rem;
+}
+
+.fa-search {
+  font-size: 1rem;
+}
+
+/* Ícones dos sistemas */
+.system-card-header i,
+.system-icon {
+  font-size: 1.5rem;
+}
+
+/* Cores específicas para os ícones */
+.fa-graduation-cap {
+  color: white;
+}
+
+.fa-chart-line {
+  color: white;
+}
+
+.fa-folder {
+  color: white;
+}
+
+.fa-users {
+  color: white;
+}
+
+.fa-tasks {
+  color: white;
+}
+
+.fa-project-diagram {
+  color: white;
+}
+
+.fa-file-alt {
+  color: white;
+}
+
+/* Animação para o indicador de anúncio */
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.animate-fade-in-out {
+  animation: fadeInOut 4s ease-in-out forwards;
+}
+
