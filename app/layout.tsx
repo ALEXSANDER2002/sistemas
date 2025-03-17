@@ -5,7 +5,7 @@ import "./globals.css"
 
 export const metadata: Metadata = {
   title: "UNIFESSPA - Sistemas Institucionais",
-  description: "Sistemas Institucionais da Universidade Federal do Sul e Sudeste do Pará",
+  description: " da Universidade Federal do Sul e Sudeste do Pará",
   generator: 'v0.dev'
 }
 

@@ -4,7 +4,6 @@
  * Menu de Acessibilidade
  *
  * Este componente fornece controles de acessibilidade para o usuário:
- * - Alternância de tema (claro/escuro)
  * - Alternância de alto contraste
  * - Ajuste de tamanho de fonte
  * - Acesso ao VLibras
@@ -88,17 +87,13 @@ export function AccessibilityMenu({ onAnnounce, className = "" }: AccessibilityM
     }
   }
 
-  // Anunciar mudanças de tema
-  const handleThemeChange = (isDark: boolean, isHighContrast: boolean) => {
+  // Anunciar mudanças de contraste
+  const handleContrastChange = (isHighContrast: boolean) => {
     if (onAnnounce) {
-      if (isDark && isHighContrast) {
-        onAnnounce("Modo escuro com alto contraste ativado")
-      } else if (isDark) {
-        onAnnounce("Modo escuro ativado")
-      } else if (isHighContrast) {
+      if (isHighContrast) {
         onAnnounce("Alto contraste ativado")
       } else {
-        onAnnounce("Modo claro com contraste normal ativado")
+        onAnnounce("Contraste normal ativado")
       }
     }
   }
@@ -109,8 +104,8 @@ export function AccessibilityMenu({ onAnnounce, className = "" }: AccessibilityM
       aria-label="Menu de acessibilidade"
       className={`flex flex-wrap items-center gap-2 ${className}`}
     >
-      {/* Controles de tema */}
-      <ThemeToggle onThemeChange={handleThemeChange} />
+      {/* Controles de contraste */}
+      <ThemeToggle onThemeChange={handleContrastChange} />
 
       {/* Controles de tamanho de fonte */}
       <Button
