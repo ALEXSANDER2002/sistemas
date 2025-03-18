@@ -114,7 +114,7 @@ export default function SystemCards() {
   const [searchTerm, setSearchTerm] = useState("")
   const [highContrast, setHighContrast] = useState(false)
   const [fontSize, setFontSize] = useState(16)
-  const [expandedCards, setExpandedCards] = useState<string[]>([])
+  const [expandedCard, setExpandedCard] = useState<string | null>(null)
   const [announceMessage, setAnnounceMessage] = useState("")
 
   // Filtrar sistemas com base no termo de busca
@@ -213,35 +213,27 @@ export default function SystemCards() {
 
   // Função para alternar a expansão de um card
   const toggleCardExpansion = (id: string) => {
-    setExpandedCards((prev: string[]) => 
-      prev.includes(id) 
-        ? prev.filter((cardId: string) => cardId !== id) 
-        : [...prev, id]
-    )
-    
-    // Anúncio para leitores de tela
-    const system = systems.find(sys => sys.id === id)
-    if (system) {
-      const isExpanded = !expandedCards.includes(id)
-      setAnnounceMessage(isExpanded 
-        ? `Expandindo informações de ${system.title}` 
-        : `Recolhendo informações de ${system.title}`
-      )
-
-      // Scroll suave para o card expandido após um pequeno delay
-      if (isExpanded) {
-        setTimeout(() => {
-          const cardElement = document.getElementById(`card-content-${id}`)
-          if (cardElement) {
-            cardElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-          }
-        }, 300)
-      }
+    // Se o card atual já está expandido, fecha ele
+    if (expandedCard === id) {
+      setExpandedCard(null)
+      setAnnounceMessage(`Fechando informações de ${systems.find(sys => sys.id === id)?.title || ''}`)
+    } else {
+      // Caso contrário, expande este card
+      setExpandedCard(id)
+      setAnnounceMessage(`Mostrando informações de ${systems.find(sys => sys.id === id)?.title || ''}`)
     }
   }
   
   // Verifica se um card está expandido
-  const isCardExpanded = (id: string) => expandedCards.includes(id)
+  const isCardExpanded = (id: string) => expandedCard === id
+
+  // Fecha o modal ao clicar fora dele ou ao pressionar ESC
+  const closeExpandedCard = () => {
+    if (expandedCard) {
+      setAnnounceMessage(`Fechando informações de ${systems.find(sys => sys.id === expandedCard)?.title || ''}`)
+      setExpandedCard(null)
+    }
+  }
 
   // =========================================================================
   // EFEITOS (LIFECYCLE HOOKS)
@@ -281,23 +273,23 @@ export default function SystemCards() {
       if (e.altKey) {
         switch (e.key) {
           case "1": // Alt + 1: Pular para o conteúdo principal
-            e.preventDefault()
-            document.getElementById("main-content")?.focus()
+        e.preventDefault()
+        document.getElementById("main-content")?.focus()
             setAnnounceMessage("Navegando para o conteúdo principal")
             break
           case "2": // Alt + 2: Pular para o menu de acessibilidade
-            e.preventDefault()
-            document.getElementById("accessibility-menu")?.focus()
+        e.preventDefault()
+        document.getElementById("accessibility-menu")?.focus()
             setAnnounceMessage("Navegando para o menu de acessibilidade")
             break
           case "3": // Alt + 3: Pular para a busca
-            e.preventDefault()
-            document.getElementById("search-systems")?.focus()
+        e.preventDefault()
+        document.getElementById("search-systems")?.focus()
             setAnnounceMessage("Navegando para o campo de busca")
             break
           case "4": // Alt + 4: Alternar alto contraste
-            e.preventDefault()
-            toggleHighContrast()
+        e.preventDefault()
+        toggleHighContrast()
             break
           // Removendo o caso Alt + 5 para modo escuro
         }
@@ -309,6 +301,22 @@ export default function SystemCards() {
       window.removeEventListener("keydown", handleKeyDown)
     }
   }, [fontSize, highContrast])
+
+  /**
+   * Efeito para fechar o card expandido ao pressionar a tecla ESC
+   */
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && expandedCard) {
+        closeExpandedCard()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [expandedCard])
 
   // Atualizar o documento quando as preferências mudarem
   useEffect(() => {
@@ -463,8 +471,8 @@ export default function SystemCards() {
             href="#main-content" 
             className="bg-white text-[#071D41] px-4 py-2 rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-white"
           >
-            Pular para o conteúdo principal
-          </a>
+          Pular para o conteúdo principal
+        </a>
           <a 
             href="#search-systems" 
             className="bg-white text-[#071D41] px-4 py-2 rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-white"
@@ -509,7 +517,7 @@ export default function SystemCards() {
                     <div className="border-b border-gray-200 pb-2 mb-2">
                       <h3 className="text-[#071D41] font-bold text-sm mb-1">Ajustes de visualização</h3>
                       <p className="text-gray-600 text-xs mb-2">Personalize a aparência do site para melhor visualização</p>
-                    </div>
+              </div>
                     
                     <div className="flex flex-col gap-3">
                       {/* Contraste */}
@@ -517,7 +525,7 @@ export default function SystemCards() {
                         <div className="flex items-center gap-2">
                           <div className="bg-[#1351B4]/10 p-1.5 rounded-full">
                             <i className="fas fa-adjust text-[#1351B4] text-sm" aria-hidden="true"></i>
-                          </div>
+              </div>
                           <div>
                             <span className="text-gray-700 text-sm font-medium">Alto Contraste</span>
                             <p className="text-gray-500 text-xs">Melhora a visualização</p>
@@ -646,18 +654,18 @@ export default function SystemCards() {
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-4">
                   <div className="relative group">
-                    <img 
-                      src="/unifesspa.jpg" 
-                      alt="Logo UNIFESSPA" 
+                  <img 
+                    src="/unifesspa.jpg" 
+                    alt="Logo UNIFESSPA" 
                       className="h-12 w-auto rounded-sm shadow-md group-hover:shadow-lg transition-all duration-300" 
-                    />
+                  />
                     <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 rounded-sm transition-opacity duration-300"></div>
                   </div>
                   <div className="border-l-2 border-[#2670E8]/40 pl-4">
                     <div className="text-xs font-medium text-white/80 tracking-wider">UNIFESSPA</div>
                     <div className="font-bold text-sm md:text-base tracking-wide">Universidade Federal do Sul e Sudeste do Pará</div>
                     <div className="hidden md:block text-xs text-white/60 mt-0.5">Sistemas Institucionais</div>
-                  </div>
+                </div>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="hidden md:flex items-center gap-3">
@@ -665,11 +673,11 @@ export default function SystemCards() {
                      
                     </a>
                     <div className="h-5 border-r border-white/20"></div>
-                  </div>
+              </div>
                   <div className="flex items-center bg-white/10 hover:bg-white/15 transition-colors rounded-md px-3 py-1.5">
                     <span className="text-sm font-bold mr-1">gov</span>
                     <span className="text-sm font-bold text-yellow-400">.br</span>
-                  </div>
+            </div>
                 </div>
               </div>
             </div>
@@ -725,7 +733,7 @@ export default function SystemCards() {
                   Como utilizar os Sistemas
                 </h2>
                 <p className="text-gray-600 mb-3">
-                  Utilize a barra de pesquisa para encontrar rapidamente o sistema desejado. 
+                  Utilize a barra de pesquisa para encontrar rapidamente o sistema desejado.
                   Clique nos cards para expandir e ver mais informações sobre cada sistema.
                 </p>
                 <div className="flex flex-wrap gap-2 mt-4">
@@ -744,16 +752,16 @@ export default function SystemCards() {
                 </div>
               </div>
               <div className="hidden md:block md:ml-6 md:pl-6 md:border-l border-gray-200">
-                <div className="flex flex-col items-center justify-center bg-gray-50 p-4 rounded-md">
+                <div className="flex flex-col items-center justify-center bg-gray-50 p-4 rounded-md shadow-sm">
                   <div className="mb-2 text-center">
                     <i className="fas fa-question-circle text-[#1351B4] text-3xl mb-2" aria-hidden="true"></i>
-                    <h3 className="font-semibold text-[#071D41]">Precisa de ajuda?</h3>
+                    <h3 className="font-semibold text-[#071D41]">Central de Suporte</h3>
                   </div>
                   <a 
-                    href="#" 
+                    href="/atendimentos" 
                     className="text-sm text-white bg-[#1351B4] hover:bg-[#071D41] transition-colors px-4 py-2 rounded-md w-full text-center mt-2"
                   >
-                    Central de Suporte
+                    Acessar todos os atendimentos
                   </a>
                 </div>
               </div>
@@ -770,7 +778,7 @@ export default function SystemCards() {
                     <i className="fas fa-search text-[#1351B4]" aria-hidden="true"></i>
                   </div>
                   <span>Pesquisar sistemas</span>
-                </h2>
+              </h2>
                 
                 <div className="flex items-center gap-2">
                   <div className="text-sm text-gray-500 hidden md:block">
@@ -844,31 +852,31 @@ export default function SystemCards() {
                       }
                     }}
                   />
-                  {searchTerm && (
-                    <button 
-                      onClick={() => {
-                        setSearchTerm("")
-                        setAnnounceMessage("Pesquisa limpa, mostrando todos os sistemas")
-                        document.getElementById("search-systems")?.focus()
-                      }}
+                    {searchTerm && (
+                      <button 
+                        onClick={() => {
+                          setSearchTerm("")
+                          setAnnounceMessage("Pesquisa limpa, mostrando todos os sistemas")
+                          document.getElementById("search-systems")?.focus()
+                        }}
                       className="absolute right-3 text-gray-400 hover:text-gray-600 transition-colors w-8 h-8 flex items-center justify-center"
-                      aria-label="Limpar pesquisa"
-                    >
-                      <i className="fas fa-times-circle" aria-hidden="true"></i>
-                    </button>
-                  )}
-                </div>
+                        aria-label="Limpar pesquisa"
+                      >
+                        <i className="fas fa-times-circle" aria-hidden="true"></i>
+                      </button>
+                    )}
+                  </div>
                 
                 {searchTerm && (
                   <div className="mt-3 flex flex-col sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex items-center">
                       <span className={`${filteredSystems.length === 0 ? 'text-red-500' : 'text-[#1351B4]'} font-medium`}>
-                        {filteredSystems.length === 0 
-                          ? "Nenhum sistema encontrado" 
-                          : filteredSystems.length === 1 
-                            ? "1 sistema encontrado" 
-                            : `${filteredSystems.length} sistemas encontrados`}
-                      </span>
+                      {filteredSystems.length === 0 
+                        ? "Nenhum sistema encontrado" 
+                        : filteredSystems.length === 1 
+                          ? "1 sistema encontrado" 
+                          : `${filteredSystems.length} sistemas encontrados`}
+                    </span>
                       {filteredSystems.length > 0 && (
                         <span className="text-gray-500 ml-1">para "{searchTerm}"</span>
                       )}
@@ -891,8 +899,8 @@ export default function SystemCards() {
                             </button>
                           </React.Fragment>
                         ))}
-                      </div>
-                    )}
+                  </div>
+                )}
                   </div>
                 )}
                 
@@ -913,7 +921,7 @@ export default function SystemCards() {
 
             {/* Grid de cards dos sistemas */}
             <div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch"
               role="region"
               aria-label="Lista de sistemas"
             >
@@ -935,7 +943,7 @@ export default function SystemCards() {
                 filteredSystems.map((system) => (
                   <div
                     key={system.id}
-                    className={`bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group relative ${
+                    className={`bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group relative h-full ${
                       isExactMatch(system) ? 'border-[#2670E8] ring-2 ring-[#2670E8]/20 animate-pulse-light' : 'hover:border-[#2670E8]'
                     }`}
                     aria-labelledby={`system-title-${system.id}`}
@@ -951,6 +959,7 @@ export default function SystemCards() {
                     {/* Cabeçalho do card com ícone e título */}
                     <div 
                       className="p-5 border-b border-gray-100 flex items-center justify-between cursor-pointer relative pl-6 hover:bg-gray-50/50 transition-colors"
+                      style={{ minHeight: "6rem" }}
                       onClick={() => toggleCardExpansion(system.id)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
@@ -970,115 +979,55 @@ export default function SystemCards() {
                             background: `linear-gradient(135deg, ${system.color}, ${system.color}DD)`,
                             boxShadow: `0 4px 10px ${system.color}33`
                           }}
-                          aria-hidden="true"
-                        >
-                          <i className={system.icon} style={{ fontSize: "1.5rem" }}></i>
-                        </div>
+                        aria-hidden="true"
+                      >
+                        <i className={system.icon} style={{ fontSize: "1.5rem" }}></i>
+                      </div>
                         <div>
                           <h3 
                             id={`system-title-${system.id}`} 
                             className="font-bold text-[#071D41] group-hover:text-[#1351B4] transition-colors"
                           >
-                            {system.title}
-                          </h3>
+                        {system.title}
+                      </h3>
                           <div className="text-xs text-gray-500 mt-0.5 flex items-center">
-                          </div>
+                    </div>
                         </div>
                       </div>
                       <div 
-                        className="text-gray-500 bg-gray-50 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-[#1351B4]/10 group-hover:text-[#1351B4] shadow-sm" 
-                        style={{ transform: isCardExpanded(system.id) ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                        className="text-gray-500 bg-gray-50 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-[#1351B4]/10 group-hover:text-[#1351B4] shadow-sm"
                       >
                         <i className="fas fa-chevron-down text-sm" aria-hidden="true"></i>
                       </div>
                     </div>
                     
-                    {/* Conteúdo expandido do card */}
-                    <div 
-                      id={`card-content-${system.id}`}
-                      className={`transition-all duration-300 overflow-hidden bg-gray-50/50 ${
-                        isCardExpanded(system.id) 
-                          ? 'max-h-[800px] opacity-100 visible' 
-                          : 'max-h-0 opacity-0 invisible'
-                      }`}
-                    >
-                      {isCardExpanded(system.id) && (
-                        <div className="p-5 border-b border-gray-100">
-                          {/* Detalhes do sistema com ícone e estilo melhorado */}
-                          <div className="mb-4">
-                            <h4 className="font-semibold text-[#071D41] mb-3 flex items-center">
-                              <div className="bg-[#1351B4]/10 p-1.5 rounded-full mr-2">
-                                <i className="fas fa-info-circle text-[#1351B4] text-sm" aria-hidden="true"></i>
-                              </div>
-                              Detalhes
-                            </h4>
-                            <div className="pl-6 bg-white p-3 rounded-md shadow-sm border border-gray-100">
-                              <p className="text-sm text-gray-600 leading-relaxed">{system.detailedInfo}</p>
-                            </div>
-                          </div>
-                          
-                          {/* Funcionalidades com layout em grid e cards individuais */}
-                          {system.features && system.features.length > 0 && (
-                            <div className="mb-2">
-                              <h4 className="font-semibold text-[#071D41] mb-3 flex items-center">
-                                <div className="bg-[#1351B4]/10 p-1.5 rounded-full mr-2">
-                                  <i className="fas fa-list text-[#1351B4] text-sm" aria-hidden="true"></i>
-                                </div>
-                                Funcionalidades
-                              </h4>
-                              <div className="pl-6">
-                                <ul className="text-sm text-gray-600 grid grid-cols-1 gap-2">
-                                  {system.features.map((feature, index) => (
-                                    <li 
-                                      key={index} 
-                                      className="flex items-start bg-white p-3 rounded-md shadow-sm border border-gray-100 hover:border-[#1351B4]/30 hover:shadow-md transition-all duration-200"
-                                    >
-                                      <div 
-                                        className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mr-2 mt-0.5"
-                                        style={{ 
-                                          background: `linear-gradient(135deg, ${system.color}, ${system.color}DD)`,
-                                          boxShadow: `0 2px 4px ${system.color}33`
-                                        }}
-                                      >
-                                        <i className="fas fa-check text-white text-xs" aria-hidden="true"></i>
-                                      </div>
-                                      <span className="leading-tight">{feature}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                    
                     {/* Descrição e botão de acesso */}
-                    <div className="p-5 flex-grow flex flex-col justify-between relative pl-6">
-                      <div className="bg-gray-50 p-3 rounded-md mb-5">
+                    <div className="p-5 flex-grow flex flex-col justify-between relative pl-6" style={{ minHeight: "12rem" }}>
+                      <div className="bg-gray-50 p-3 rounded-md mb-5 overflow-y-auto" style={{ height: "7rem" }}>
                         <p className="text-sm text-gray-600 leading-relaxed">{system.description}</p>
                       </div>
                       
-                      <div className="mt-auto">
-                        <Link
-                          href={`/sistema/${system.id}`}
+                      <div className="mt-auto pt-2">
+                      <Link
+                        href={`/sistema/${system.id}`}
                           className="block w-full py-3 px-4 bg-gradient-to-r from-[#1351B4] to-[#2670E8] hover:from-[#071D41] hover:to-[#1351B4] text-white text-center font-bold transition-all rounded-md focus:outline-none focus:ring-2 focus:ring-[#2670E8] focus:ring-offset-2 flex items-center justify-center group-hover:shadow-md"
-                          aria-label={`Acessar ${system.title}`}
                           style={{ 
-                            boxShadow: `0 2px 8px ${system.color}33`
+                            boxShadow: `0 2px 8px ${system.color}33`,
+                            height: "3rem"
                           }}
-                        >
+                        aria-label={`Acessar ${system.title}`}
+                      >
                           <span>Acessar Sistema</span>
-                          <i className="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true"></i>
-                        </Link>
+                        <i className="fas fa-arrow-right ml-2" aria-hidden="true"></i>
+                      </Link>
                       </div>
                       
                       {/* Indicador de status ou tags */}
                       <div className="absolute top-2 right-2 flex space-x-1">
                         {system.id === "atena" && (
-                          <span className="bg-green-100 text-green-800 text-xs px-1.5 py-0.5 rounded-full flex items-center">
-                            <i className="fas fa-star text-[0.6rem] mr-1" aria-hidden="true"></i>
-                            Principal
+                          <span className="">
+                            
+                         
                           </span>
                         )}
                         {system.lastUpdate && new Date(system.lastUpdate.split('/').reverse().join('-')) > new Date(Date.now() - 30*24*60*60*1000) && (
@@ -1104,9 +1053,9 @@ export default function SystemCards() {
               <div className="flex flex-col items-start">
                 <div className="flex items-center mb-4">
                   <img src="/unifesspa.jpg" alt="Logo UNIFESSPA" className="h-10 w-auto mr-3" />
-                  <div>
+              <div>
                     <h2 className="font-bold text-base">UNIFESSPA</h2>
-                    <p className="text-xs text-gray-300">Universidade Federal do Sul e Sudeste do Pará</p>
+                <p className="text-xs text-gray-300">Universidade Federal do Sul e Sudeste do Pará</p>
                   </div>
                 </div>
                 <address className="text-xs text-gray-300 not-italic mb-4 max-w-xs">
@@ -1117,7 +1066,7 @@ export default function SystemCards() {
 
               {/* Links rápidos */}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-x-12 gap-y-6">
-                <div>
+              <div>
                   <h3 className="text-sm font-semibold mb-3 text-gray-100">Institucional</h3>
                   <ul className="space-y-2">
                     <li>
@@ -1156,7 +1105,7 @@ export default function SystemCards() {
                       </a>
                     </li>
                   </ul>
-                </div>
+              </div>
                 <div>
                   <h3 className="text-sm font-semibold mb-3 text-gray-100">Redes Sociais</h3>
                   <div className="flex space-x-2">
@@ -1200,6 +1149,139 @@ export default function SystemCards() {
           </div>
         </footer>
       </div>
+
+      {/* Modal para detalhes expandidos do card */}
+      {expandedCard && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity"
+            onClick={closeExpandedCard}
+            aria-hidden="true"
+          ></div>
+          
+          {systems.filter(s => s.id === expandedCard).map(system => (
+            <div 
+              key={system.id}
+              id={`card-content-${system.id}`}
+              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-w-2xl w-[90%] bg-white rounded-xl shadow-2xl z-50 transition-all"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={`modal-title-${system.id}`}
+            >
+              <div className="relative">
+                {/* Barra colorida no topo */}
+                <div 
+                  className="h-2 w-full rounded-t-xl"
+                  style={{ 
+                    background: `linear-gradient(to right, ${system.color}, ${system.color}99)` 
+                  }}
+                ></div>
+                
+                {/* Botão de fechar */}
+                <button 
+                  onClick={closeExpandedCard}
+                  className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-700 transition-colors"
+                  aria-label="Fechar detalhes"
+                >
+                  <i className="fas fa-times" aria-hidden="true"></i>
+                </button>
+                
+                {/* Cabeçalho */}
+                <div className="p-6 flex items-start gap-4 border-b border-gray-100">
+                  <div
+                    className="w-16 h-16 flex-shrink-0 flex items-center justify-center text-white rounded-lg shadow-lg"
+                    style={{ 
+                      background: `linear-gradient(135deg, ${system.color}, ${system.color}DD)`,
+                      boxShadow: `0 4px 10px ${system.color}33`                    }}
+                  >
+                    <i className={system.icon} style={{ fontSize: "2rem" }}></i>
+                  </div>
+                  
+                  <div>
+                    <h2 
+                      id={`modal-title-${system.id}`}
+                      className="text-xl font-bold text-[#071D41]"
+                    >
+                      {system.title}
+                    </h2>
+                    <p className="text-gray-600 mt-1">{system.description}</p>
+                    
+                    {system.lastUpdate && (
+                      <div className="mt-2 flex items-center text-sm text-gray-500">
+                        <i className="fas fa-clock mr-1 text-[0.7rem]" aria-hidden="true"></i>
+                        Última atualização: {system.lastUpdate}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Conteúdo */}
+                <div className="p-6 max-h-[70vh] overflow-y-auto">
+                  {/* Detalhes do sistema */}
+                  <div className="mb-6">
+                    <h3 className="font-semibold text-[#071D41] mb-3 flex items-center">
+                      <div className="bg-[#1351B4]/10 p-1.5 rounded-full mr-2">
+                        <i className="fas fa-info-circle text-[#1351B4] text-sm" aria-hidden="true"></i>
+                      </div>
+                      Detalhes do Sistema
+                    </h3>
+                    <div className="pl-8">
+                      <div className="bg-gray-50 p-4 rounded-md border border-gray-100">
+                        <p className="text-gray-700 leading-relaxed">{system.detailedInfo}</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Funcionalidades */}
+                  {system.features && system.features.length > 0 && (
+                    <div className="mb-6">
+                      <h3 className="font-semibold text-[#071D41] mb-3 flex items-center">
+                        <div className="bg-[#1351B4]/10 p-1.5 rounded-full mr-2">
+                          <i className="fas fa-list text-[#1351B4] text-sm" aria-hidden="true"></i>
+                        </div>
+                        Principais Funcionalidades
+                      </h3>
+                      <div className="pl-8">
+                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {system.features.map((feature, index) => (
+                            <li 
+                              key={index} 
+                              className="flex items-start bg-white p-3 rounded-md shadow-sm border border-gray-100 hover:border-[#1351B4]/30 hover:shadow-md transition-all duration-200"
+                            >
+                              <div 
+                                className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mr-2 mt-0.5"
+                                style={{ 
+                                  background: `linear-gradient(135deg, ${system.color}, ${system.color}DD)`,
+                                  boxShadow: `0 2px 4px ${system.color}33`
+                                }}
+                              >
+                                <i className="fas fa-check text-white text-xs" aria-hidden="true"></i>
+                              </div>
+                              <span className="leading-tight">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Rodapé */}
+                <div className="border-t border-gray-100 p-4 flex justify-end">
+                  <Link
+                    href={`/sistema/${system.id}`}
+                    className="px-6 py-2.5 bg-gradient-to-r from-[#1351B4] to-[#2670E8] hover:from-[#071D41] hover:to-[#1351B4] text-white font-bold transition-all rounded-md focus:outline-none focus:ring-2 focus:ring-[#2670E8] focus:ring-offset-2 flex items-center justify-center"
+                    aria-label={`Acessar ${system.title}`}
+                  >
+                    <span>Acessar Sistema</span>
+                    <i className="fas fa-arrow-right ml-2" aria-hidden="true"></i>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ))}
+        </>
+      )}
     </>
   )
 }

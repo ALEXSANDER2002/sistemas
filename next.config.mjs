@@ -21,6 +21,14 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  reactStrictMode: true,
+  poweredByHeader: false,
+  compress: true,
+  swcMinify: true,
+  onDemandEntries: {
+    maxInactiveAge: 15 * 1000,
+    pagesBufferLength: 2,
+  }
 }
 
 mergeConfig(nextConfig, userConfig)
