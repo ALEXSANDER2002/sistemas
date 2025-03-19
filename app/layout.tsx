@@ -1,12 +1,16 @@
-import type React from "react"
-import type { Metadata } from "next"
+import './globals.css'
+import './styles/high-contrast.css'
+import { HighContrastProvider } from '@/components/HighContrastContext'
 import { ThemeProvider } from "@/components/theme-provider"
-import "./globals.css"
+import { externalLinks } from './config/external-links'
+import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "UNIFESSPA - Sistemas Institucionais",
-  description: " da Universidade Federal do Sul e Sudeste do Pará",
-  generator: 'v0.dev'
+  title: 'UNIFESSPA - Sistemas Institucionais',
+  description: 'Portal de Sistemas Institucionais da Universidade Federal do Sul e Sudeste do Pará',
+  icons: {
+    icon: '/favicon.ico'
+  }
 }
 
 export default function RootLayout({
@@ -19,21 +23,21 @@ export default function RootLayout({
       <head>
         <link
           rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-          crossOrigin="anonymous"
-          referrerPolicy="no-referrer"
+          href={externalLinks.fontAwesome.url}
+          integrity={externalLinks.fontAwesome.integrity}
+          crossOrigin={externalLinks.fontAwesome.crossOrigin}
+          referrerPolicy={externalLinks.fontAwesome.referrerPolicy}
         />
       </head>
       <body>
-        <ThemeProvider defaultTheme="light" defaultContrast="normal">
-          {children}
-        </ThemeProvider>
+        <HighContrastProvider>
+          <ThemeProvider>
+            {children}
+          </ThemeProvider>
+        </HighContrastProvider>
       </body>
     </html>
   )
 }
-
-
 
 import './globals.css'

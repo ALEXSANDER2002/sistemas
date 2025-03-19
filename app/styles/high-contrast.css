@@ -1,0 +1,123 @@
+/* Estilos de Alto Contraste */
+:root[class~="high-contrast"] {
+  --bg-primary: #000000;
+  --bg-secondary: #1A1A1A;
+  --text-primary: #FFFFFF;
+  --text-secondary: #FFFF00;
+  --border-color: #FFFFFF;
+  --link-color: #FFFF00;
+  --button-bg: #FFFFFF;
+  --button-text: #000000;
+  --highlight: #FFFF00;
+  --input-bg: #000000;
+  --input-text: #FFFFFF;
+  --input-border: #FFFFFF;
+  --header-bg: #000000;
+  --footer-bg: #000000;
+  --card-bg: #1A1A1A;
+  --card-border: #FFFFFF;
+}
+
+/* Estilos Gerais */
+:root[class~="high-contrast"] body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Cabeçalho e Rodapé */
+:root[class~="high-contrast"] header,
+:root[class~="high-contrast"] footer {
+  background: var(--header-bg) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Links */
+:root[class~="high-contrast"] a {
+  color: var(--link-color) !important;
+  text-decoration: underline;
+}
+
+:root[class~="high-contrast"] a:hover {
+  background-color: var(--link-color) !important;
+  color: var(--bg-primary) !important;
+}
+
+/* Botões */
+:root[class~="high-contrast"] button,
+:root[class~="high-contrast"] .button {
+  background-color: var(--button-bg) !important;
+  color: var(--button-text) !important;
+  border: 2px solid var(--border-color) !important;
+}
+
+:root[class~="high-contrast"] button:hover,
+:root[class~="high-contrast"] .button:hover {
+  background-color: var(--button-text) !important;
+  color: var(--button-bg) !important;
+}
+
+/* Cards */
+:root[class~="high-contrast"] .bg-white,
+:root[class~="high-contrast"] [class*="bg-gray-"] {
+  background-color: var(--card-bg) !important;
+  border: 2px solid var(--card-border) !important;
+}
+
+/* Inputs */
+:root[class~="high-contrast"] input,
+:root[class~="high-contrast"] select,
+:root[class~="high-contrast"] textarea {
+  background-color: var(--input-bg) !important;
+  color: var(--input-text) !important;
+  border: 2px solid var(--input-border) !important;
+}
+
+/* Textos */
+:root[class~="high-contrast"] h1,
+:root[class~="high-contrast"] h2,
+:root[class~="high-contrast"] h3,
+:root[class~="high-contrast"] h4,
+:root[class~="high-contrast"] h5,
+:root[class~="high-contrast"] h6 {
+  color: var(--text-primary) !important;
+}
+
+:root[class~="high-contrast"] p,
+:root[class~="high-contrast"] span,
+:root[class~="high-contrast"] div {
+  color: var(--text-primary) !important;
+}
+
+/* Ícones */
+:root[class~="high-contrast"] i[class*="fa-"],
+:root[class~="high-contrast"] svg {
+  color: var(--text-primary) !important;
+}
+
+/* Focus */
+:root[class~="high-contrast"] *:focus {
+  outline: 3px solid var(--highlight) !important;
+  outline-offset: 2px !important;
+}
+
+/* Gradientes e Backgrounds */
+:root[class~="high-contrast"] [class*="bg-gradient-"] {
+  background: var(--bg-primary) !important;
+  background-image: none !important;
+}
+
+/* Imagens */
+:root[class~="high-contrast"] img {
+  filter: grayscale(100%) contrast(120%) !important;
+  border: 2px solid var(--border-color) !important;
+}
+
+/* Bordas */
+:root[class~="high-contrast"] [class*="border"] {
+  border-color: var(--border-color) !important;
+}
+
+/* Sombras */
+:root[class~="high-contrast"] [class*="shadow"] {
+  box-shadow: none !important;
+} 

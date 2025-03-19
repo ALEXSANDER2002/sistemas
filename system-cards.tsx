@@ -18,6 +18,7 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { AccessibilityMenu } from "@/components/accessibility-menu"
+import { useHighContrast } from "@/components/HighContrastContext"
 
 // Definição da interface para os dados dos sistemas
 interface SystemCard {
@@ -30,6 +31,17 @@ interface SystemCard {
   features?: string[]
   lastUpdate?: string
 }
+
+// Palavras-chave relacionadas para cada sistema
+const palavrasRelacionadasSistemas = {
+  atena: ['acadêmico', 'matricula', 'notas', 'histórico', 'disciplinas', 'professor', 'aluno', 'curso', 'graduação'],
+  avaliacao: ['desempenho', 'servidor', 'avaliação', 'metas', 'objetivos', 'feedback', 'desenvolvimento', 'progresso'],
+  coc: ['documentos', 'conteúdo', 'arquivos', 'organização', 'repositório', 'pasta', 'compartilhamento'],
+  sae: ['educacional', 'acompanhamento', 'aluno', 'estudante', 'frequência', 'desempenho', 'pedagógico', 'ensino'],
+  sisplad: ['planejamento', 'desenvolvimento', 'projetos', 'estratégia', 'indicadores', 'metas', 'gestão'],
+  sisprol: ['projetos', 'logística', 'recursos', 'cronograma', 'operações', 'gerenciamento', 'controle'],
+  udocs: ['documentos', 'arquivo', 'gestão', 'organização', 'repositório', 'digitalização', 'processos']
+};
 
 export default function SystemCards() {
   // =========================================================================
@@ -112,113 +124,17 @@ export default function SystemCards() {
   // ESTADOS DO COMPONENTE
   // =========================================================================
   const [searchTerm, setSearchTerm] = useState("")
-  const [highContrast, setHighContrast] = useState(false)
+  const { highContrast, toggleHighContrast } = useHighContrast()
   const [fontSize, setFontSize] = useState(16)
   const [expandedCard, setExpandedCard] = useState<string | null>(null)
   const [announceMessage, setAnnounceMessage] = useState("")
 
-  // Filtrar sistemas com base no termo de busca
-  const filteredSystems = systems.filter((system) => {
-    if (!searchTerm) return true
-    
-    const searchTermLower = searchTerm.toLowerCase().trim()
-    const searchTerms = searchTermLower.split(/\s+/).filter(term => term.length > 0)
-    
-    // Se não houver termos válidos após a divisão, retorne todos os sistemas
-    if (searchTerms.length === 0) return true
-    
-    // Verifica se todos os termos de busca estão presentes em pelo menos um dos campos
-    return searchTerms.every(term => 
-      system.title.toLowerCase().includes(term) ||
-      system.description.toLowerCase().includes(term) ||
-      (system.detailedInfo && system.detailedInfo.toLowerCase().includes(term)) ||
-      (system.features && system.features.some(feature => feature.toLowerCase().includes(term)))
-    )
-  })
-
-  // Verificar se um card corresponde exatamente ao termo de busca (para destaque)
-  const isExactMatch = (system: SystemCard) => {
-    if (!searchTerm) return false
-    const searchTermLower = searchTerm.toLowerCase().trim()
-    return system.title.toLowerCase() === searchTermLower || 
-           system.title.toLowerCase().startsWith(searchTermLower + ' ')
-  }
-
-  // =========================================================================
-  // FUNÇÕES DE ACESSIBILIDADE
-  // =========================================================================
-
-  /**
-   * Aumenta o tamanho da fonte até um limite máximo
-   * e anuncia a mudança para leitores de tela
-   */
-  const increaseFontSize = () => {
-    if (fontSize < 24) {
-      const newSize = fontSize + 2
-      setFontSize(newSize)
-      setAnnounceMessage(`Tamanho da fonte aumentado para ${newSize} pixels`)
-
-      // Salvar preferência no localStorage
-      if (typeof window !== "undefined") {
-        localStorage.setItem("fontSize", newSize.toString())
-      }
-    } else {
-      setAnnounceMessage("Tamanho máximo da fonte atingido")
-    }
-  }
-
-  /**
-   * Diminui o tamanho da fonte até um limite mínimo
-   * e anuncia a mudança para leitores de tela
-   */
-  const decreaseFontSize = () => {
-    if (fontSize > 12) {
-      const newSize = fontSize - 2
-      setFontSize(newSize)
-      setAnnounceMessage(`Tamanho da fonte diminuído para ${newSize} pixels`)
-
-      // Salvar preferência no localStorage
-      if (typeof window !== "undefined") {
-        localStorage.setItem("fontSize", newSize.toString())
-      }
-    } else {
-      setAnnounceMessage("Tamanho mínimo da fonte atingido")
-    }
-  }
-
-  /**
-   * Toggles high contrast mode and saves the preference
-   * Applies the 'high-contrast' class to the document element
-   */
-  const toggleHighContrast = () => {
-    const newContrastState = !highContrast
-    setHighContrast(newContrastState)
-
-    // Apply directly to the HTML element
-    if (typeof window !== "undefined") {
-      if (newContrastState) {
-        document.documentElement.classList.add("high-contrast")
-        document.documentElement.classList.remove("normal-contrast")
-      } else {
-        document.documentElement.classList.add("normal-contrast")
-        document.documentElement.classList.remove("high-contrast")
-      }
-
-      // Store preference
-      localStorage.setItem("highContrast", newContrastState.toString())
-    }
-
-    setAnnounceMessage(newContrastState ? "Modo de alto contraste ativado" : "Modo de alto contraste desativado")
-  }
-
   // Função para alternar a expansão de um card
   const toggleCardExpansion = (id: string) => {
-    // Se o card atual já está expandido, fecha ele
     if (expandedCard === id) {
       setExpandedCard(null)
       setAnnounceMessage(`Fechando informações de ${systems.find(sys => sys.id === id)?.title || ''}`)
     } else {
-      // Caso contrário, expande este card
       setExpandedCard(id)
       setAnnounceMessage(`Mostrando informações de ${systems.find(sys => sys.id === id)?.title || ''}`)
     }
@@ -233,6 +149,45 @@ export default function SystemCards() {
       setAnnounceMessage(`Fechando informações de ${systems.find(sys => sys.id === expandedCard)?.title || ''}`)
       setExpandedCard(null)
     }
+  }
+
+  // Função para verificar se um termo está relacionado a um sistema
+  const verificarTermoRelacionado = (termo: string, systemId: string) => {
+    const termoLower = termo.toLowerCase();
+    const palavras = palavrasRelacionadasSistemas[systemId as keyof typeof palavrasRelacionadasSistemas] || [];
+    
+    return palavras.some(palavra => 
+      palavra.toLowerCase().includes(termoLower) || 
+      termoLower.includes(palavra.toLowerCase())
+    );
+  };
+
+  // Filtrar sistemas com base no termo de busca
+  const filteredSystems = systems.filter((system) => {
+    if (!searchTerm) return true;
+    
+    const searchTermLower = searchTerm.toLowerCase().trim();
+    const searchTerms = searchTermLower.split(/\s+/).filter(term => term.length > 0);
+    
+    // Se não houver termos válidos após a divisão, retorne todos os sistemas
+    if (searchTerms.length === 0) return true;
+    
+    // Verifica se todos os termos de busca estão presentes em pelo menos um dos campos
+    return searchTerms.every(term => 
+      system.title.toLowerCase().includes(term) ||
+      system.description.toLowerCase().includes(term) ||
+      (system.detailedInfo && system.detailedInfo.toLowerCase().includes(term)) ||
+      (system.features && system.features.some(feature => feature.toLowerCase().includes(term))) ||
+      verificarTermoRelacionado(term, system.id) // Adiciona verificação de termos relacionados
+    );
+  });
+
+  // Verificar se um card corresponde exatamente ao termo de busca (para destaque)
+  const isExactMatch = (system: SystemCard) => {
+    if (!searchTerm) return false
+    const searchTermLower = searchTerm.toLowerCase().trim()
+    return system.title.toLowerCase() === searchTermLower || 
+           system.title.toLowerCase().startsWith(searchTermLower + ' ')
   }
 
   // =========================================================================
@@ -256,9 +211,7 @@ export default function SystemCards() {
       // Carregar preferência de alto contraste
       const savedHighContrast = localStorage.getItem("highContrast")
       if (savedHighContrast === "true") {
-        setHighContrast(true)
-        document.documentElement.classList.add("high-contrast")
-        document.documentElement.classList.remove("normal-contrast")
+        toggleHighContrast()
       }
     }
   }, [])
@@ -322,119 +275,8 @@ export default function SystemCards() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       document.documentElement.style.fontSize = `${fontSize}px`
-      
-      if (highContrast) {
-        document.documentElement.classList.add("high-contrast")
-        document.documentElement.classList.remove("normal-contrast")
-        
-        // Adicionar estilos de alto contraste diretamente no head
-        let styleEl = document.getElementById('high-contrast-styles')
-        if (!styleEl) {
-          styleEl = document.createElement('style')
-          styleEl.id = 'high-contrast-styles'
-          document.head.appendChild(styleEl)
-        }
-        
-        styleEl.textContent = `
-          .high-contrast {
-            --bg-color: #000000;
-            --text-color: #FFFFFF;
-            --link-color: #FFFF00;
-            --border-color: #FFFFFF;
-            --heading-color: #FFFFFF;
-            --button-bg: #FFFFFF;
-            --button-text: #000000;
-            --highlight-color: #FFFF00;
-          }
-          
-          .high-contrast body,
-          .high-contrast .bg-white,
-          .high-contrast .bg-gray-50,
-          .high-contrast .bg-gray-100,
-          .high-contrast .bg-gray-200,
-          .high-contrast .bg-blue-50 {
-            background-color: var(--bg-color) !important;
-            color: var(--text-color) !important;
-          }
-          
-          .high-contrast header,
-          .high-contrast footer,
-          .high-contrast .bg-gradient-to-r {
-            background: var(--bg-color) !important;
-            background-image: none !important;
-          }
-          
-          .high-contrast h1, 
-          .high-contrast h2, 
-          .high-contrast h3, 
-          .high-contrast h4, 
-          .high-contrast h5, 
-          .high-contrast h6,
-          .high-contrast p,
-          .high-contrast span,
-          .high-contrast div {
-            color: var(--text-color) !important;
-          }
-          
-          .high-contrast a {
-            color: var(--link-color) !important;
-            text-decoration: underline;
-          }
-          
-          .high-contrast button,
-          .high-contrast .button,
-          .high-contrast [role="button"] {
-            background-color: var(--button-bg) !important;
-            color: var(--button-text) !important;
-            border: 2px solid var(--border-color) !important;
-          }
-          
-          .high-contrast input,
-          .high-contrast select,
-          .high-contrast textarea {
-            background-color: var(--bg-color) !important;
-            color: var(--text-color) !important;
-            border: 2px solid var(--border-color) !important;
-          }
-          
-          .high-contrast img,
-          .high-contrast svg,
-          .high-contrast .icon {
-            filter: grayscale(100%) contrast(120%);
-          }
-          
-          .high-contrast *:focus {
-            outline: 3px solid var(--highlight-color) !important;
-            outline-offset: 2px !important;
-          }
-          
-          .high-contrast .border,
-          .high-contrast .border-t,
-          .high-contrast .border-b,
-          .high-contrast .border-l,
-          .high-contrast .border-r {
-            border-color: var(--border-color) !important;
-          }
-          
-          .high-contrast .shadow-sm,
-          .high-contrast .shadow-md,
-          .high-contrast .shadow-lg,
-          .high-contrast .shadow-xl {
-            box-shadow: none !important;
-          }
-        `
-      } else {
-        document.documentElement.classList.add("normal-contrast")
-        document.documentElement.classList.remove("high-contrast")
-        
-        // Remover estilos de alto contraste
-        const styleEl = document.getElementById('high-contrast-styles')
-        if (styleEl) {
-          styleEl.textContent = ''
-        }
-      }
     }
-  }, [fontSize, highContrast])
+  }, [fontSize])
 
   // =========================================================================
   // RENDERIZAÇÃO DO COMPONENTE
@@ -557,14 +399,30 @@ export default function SystemCards() {
                         </div>
                         <div className="flex items-center gap-1">
                           <button 
-                            onClick={decreaseFontSize}
+                            onClick={() => {
+                              if (fontSize > 12) {
+                                const newSize = fontSize - 2
+                                setFontSize(newSize)
+                                setAnnounceMessage(`Tamanho da fonte diminuído para ${newSize} pixels`)
+                              } else {
+                                setAnnounceMessage("Tamanho mínimo da fonte atingido")
+                              }
+                            }}
                             className="bg-gray-100 hover:bg-gray-200 transition-colors w-7 h-7 rounded-full flex items-center justify-center text-gray-700"
                             aria-label="Diminuir tamanho da fonte"
                           >
                             <i className="fas fa-minus text-xs" aria-hidden="true"></i>
                           </button>
                           <button 
-                            onClick={increaseFontSize}
+                            onClick={() => {
+                              if (fontSize < 24) {
+                                const newSize = fontSize + 2
+                                setFontSize(newSize)
+                                setAnnounceMessage(`Tamanho da fonte aumentado para ${newSize} pixels`)
+                              } else {
+                                setAnnounceMessage("Tamanho máximo da fonte atingido")
+                              }
+                            }}
                             className="bg-gray-100 hover:bg-gray-200 transition-colors w-7 h-7 rounded-full flex items-center justify-center text-gray-700"
                             aria-label="Aumentar tamanho da fonte"
                           >
@@ -1192,7 +1050,8 @@ export default function SystemCards() {
                     className="w-16 h-16 flex-shrink-0 flex items-center justify-center text-white rounded-lg shadow-lg"
                     style={{ 
                       background: `linear-gradient(135deg, ${system.color}, ${system.color}DD)`,
-                      boxShadow: `0 4px 10px ${system.color}33`                    }}
+                      boxShadow: `0 4px 10px ${system.color}33`
+                    }}
                   >
                     <i className={system.icon} style={{ fontSize: "2rem" }}></i>
                   </div>
