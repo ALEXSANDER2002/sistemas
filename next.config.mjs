@@ -24,7 +24,6 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
-  swcMinify: true,
   onDemandEntries: {
     maxInactiveAge: 15 * 1000,
     pagesBufferLength: 2,

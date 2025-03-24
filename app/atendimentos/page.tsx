@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
+import Fuse from 'fuse.js';
 
 // Palavras-chave relacionadas para cada setor
 const palavrasRelacionadas = {
@@ -9,11 +10,19 @@ const palavrasRelacionadas = {
   crca: ['matrícula', 'histórico', 'diploma', 'documentos', 'declaração', 'notas', 'aproveitamento', 'curso', 'disciplinas'],
   progep: ['servidor', 'contracheque', 'férias', 'ponto', 'frequência', 'capacitação', 'concurso', 'folha', 'pagamento'],
   sinfra: ['manutenção', 'obra', 'reforma', 'estrutura', 'prédio', 'sala', 'limpeza', 'segurança', 'equipamentos'],
-  proeg: ['graduação', 'curso', 'aula', 'professor', 'disciplina', 'grade', 'horário', 'monitoria', 'estágio'],
+  proeg: ['graduação', 'curso', 'aula', 'professor', 'disciplina', 'grade', 'horário', 'monitoria', 'estágio', 'ensino'],
   propit: ['pesquisa', 'projeto', 'bolsa', 'iniciação', 'científica', 'laboratório', 'mestrado', 'doutorado'],
   proex: ['extensão', 'cultura', 'evento', 'projeto', 'comunidade', 'curso', 'oficina', 'workshop'],
-  proad: ['administração', 'compras', 'licitação', 'contrato', 'patrimônio', 'almoxarifado', 'orçamento'],
+  proad: ['administração', 'compras', 'licitação', 'contrato', 'patrimônio', 'almoxarifado', 'orçamento', 'administrativo'],
   naia: ['acessibilidade', 'inclusão', 'adaptação', 'deficiência', 'apoio', 'assistência', 'intérprete']
+};
+
+// Palavras-chave adicionais para tipos específicos de atendimento
+const palavrasAdicionais = {
+  academico: ['graduação', 'curso', 'matrícula', 'histórico', 'diploma', 'documentos', 'declaração', 'notas'],
+  administrativo: ['administração', 'servidor', 'contrato', 'patrimônio', 'almoxarifado', 'orçamento', 'compras'],
+  ensino: ['graduação', 'aula', 'professor', 'disciplina', 'grade', 'horário', 'monitoria', 'estágio', 'educação', 'aprendizagem'],
+  suporte: ['computador', 'internet', 'wifi', 'sistema', 'email', 'rede', 'impressora', 'tecnologia', 'manutenção']
 };
 
 const atendimentos = [
@@ -120,37 +129,147 @@ const atendimentos = [
 
 export default function Atendimentos() {
   const [termoBusca, setTermoBusca] = useState('');
+  const [announceMessage, setAnnounceMessage] = useState('');
+
+  // Configuração do Fuse.js para busca com tolerância a erros
+  const fuseOptions = {
+    includeScore: true,
+    threshold: 0.4, // Tolerância a erros (0 = correspondência exata, 1 = correspondência muito flexível)
+    keys: [
+      { name: 'titulo', weight: 2 }, // Peso maior para o título
+      { name: 'descricao', weight: 1.5 }, // Peso médio para descrição
+      'id',
+      'email',
+      'contato',
+      'local'
+    ],
+    ignoreLocation: true,
+    useExtendedSearch: true
+  };
+
+  // Criar instância do Fuse.js
+  const fuse = useMemo(() => new Fuse(atendimentos, fuseOptions), []);
 
   // Função para verificar se um termo está relacionado a um atendimento
   const verificarTermoRelacionado = (termo: string, atendimentoId: string) => {
     const termoLower = termo.toLowerCase();
+    
+    // Verificar nas palavras-chave específicas do setor
     const palavras = palavrasRelacionadas[atendimentoId as keyof typeof palavrasRelacionadas] || [];
     
-    return palavras.some(palavra => 
-      palavra.toLowerCase().includes(termoLower) || 
-      termoLower.includes(palavra.toLowerCase())
+    // Verificar palavras-chave de categorias (para termos como "acadêmico", "administrativo", etc.)
+    const termosCategoria = Object.keys(palavrasAdicionais);
+    const categoriasRelacionadas = termosCategoria.filter(categoria => {
+      return categoria === termoLower || 
+             palavrasAdicionais[categoria as keyof typeof palavrasAdicionais].some(palavra => 
+               palavra.toLowerCase().includes(termoLower) || 
+               termoLower.includes(palavra.toLowerCase())
+             );
+    });
+    
+    // Verificar se o atendimento está relacionado a alguma categoria encontrada
+    const relacionadoCategoria = categoriasRelacionadas.some(categoria => {
+      const atendimentosCategoria = atendimentos.filter(a => {
+        return palavrasAdicionais[categoria as keyof typeof palavrasAdicionais].some(palavra => 
+          a.titulo.toLowerCase().includes(palavra.toLowerCase()) || 
+          a.descricao.toLowerCase().includes(palavra.toLowerCase()) ||
+          palavrasRelacionadas[a.id as keyof typeof palavrasRelacionadas]?.some(p => 
+            p.toLowerCase() === palavra.toLowerCase()
+          )
+        );
+      }).map(a => a.id);
+      
+      return atendimentosCategoria.includes(atendimentoId);
+    });
+    
+    return (
+      // Verificação direta nas palavras-chave do setor
+      palavras.some(palavra => 
+        palavra.toLowerCase().includes(termoLower) || 
+        termoLower.includes(palavra.toLowerCase())
+      ) ||
+      // Verificação por categoria
+      relacionadoCategoria
     );
   };
 
-  // Filtra os atendimentos com base no termo de busca
+  // Filtra os atendimentos com base no termo de busca usando Fuse.js
   const atendimentosFiltrados = useMemo(() => {
     if (!termoBusca) return atendimentos;
 
-    const termoLower = termoBusca.toLowerCase();
-    return atendimentos.filter(atendimento => {
-      // Busca no título e descrição
-      const matchTitulo = atendimento.titulo.toLowerCase().includes(termoLower);
-      const matchDescricao = atendimento.descricao.toLowerCase().includes(termoLower);
+    const termoLower = termoBusca.toLowerCase().trim();
+    
+    // Se o termo for vazio após o trim, retorne todos os atendimentos
+    if (termoLower.length === 0) return atendimentos;
+    
+    // Verificar se o termo é exatamente uma categoria
+    if (termoLower in palavrasAdicionais) {
+      const palavrasDaCategoria = palavrasAdicionais[termoLower as keyof typeof palavrasAdicionais];
       
-      // Busca em palavras relacionadas
-      const matchRelacionado = verificarTermoRelacionado(termoLower, atendimento.id);
+      return atendimentos.filter(atendimento => {
+        // Verifica se o atendimento tem relação com as palavras da categoria
+        return (
+          atendimento.titulo.toLowerCase().includes(termoLower) ||
+          atendimento.descricao.toLowerCase().includes(termoLower) ||
+          palavrasDaCategoria.some(palavra => 
+            atendimento.titulo.toLowerCase().includes(palavra) ||
+            atendimento.descricao.toLowerCase().includes(palavra) ||
+            palavrasRelacionadas[atendimento.id as keyof typeof palavrasRelacionadas]?.some(p => 
+              p.toLowerCase() === palavra.toLowerCase()
+            )
+          )
+        );
+      });
+    }
+    
+    // Realizar busca com Fuse.js
+    const fuseResults = fuse.search(termoLower);
+    
+    // Se não encontrarmos resultados com Fuse, tente verificar termos relacionados
+    if (fuseResults.length === 0) {
+      return atendimentos.filter(atendimento => {
+        // Busca no título e descrição
+        const matchTitulo = atendimento.titulo.toLowerCase().includes(termoLower);
+        const matchDescricao = atendimento.descricao.toLowerCase().includes(termoLower);
+        
+        // Busca em palavras relacionadas
+        const matchRelacionado = verificarTermoRelacionado(termoLower, atendimento.id);
 
-      return matchTitulo || matchDescricao || matchRelacionado;
-    });
+        return matchTitulo || matchDescricao || matchRelacionado;
+      });
+    }
+    
+    // Processar resultados do Fuse (converta para array de atendimentos)
+    return fuseResults.map(result => result.item);
+  }, [termoBusca, fuse]);
+
+  // Efeito para lidar com tecla ESC para limpar a busca
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && termoBusca) {
+        setTermoBusca('');
+        setAnnounceMessage('Campo de busca limpo');
+        document.getElementById('search-atendimentos')?.focus();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [termoBusca]);
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Anúncio de acessibilidade para leitores de tela */}
+      <div
+        className="sr-only"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {announceMessage}
+      </div>
+      
       {/* Cabeçalho */}
       <div className="bg-[#071D41] text-white py-8">
         <div className="container mx-auto px-4">
@@ -187,14 +306,26 @@ export default function Atendimentos() {
               type="text"
               placeholder="Busque por serviço, setor ou palavra-chave..."
               value={termoBusca}
-              onChange={(e) => setTermoBusca(e.target.value)}
+              onChange={(e) => {
+                setTermoBusca(e.target.value)
+                if (e.target.value === '') {
+                  setAnnounceMessage("Campo de busca limpo")
+                }
+              }}
               className="w-full px-4 py-3 pl-12 rounded-lg border border-gray-200 focus:border-[#1351B4] focus:ring-2 focus:ring-[#1351B4]/20 transition-all outline-none"
+              aria-label="Buscar atendimentos"
+              id="search-atendimentos"
             />
             <i className="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
             {termoBusca && (
               <button
-                onClick={() => setTermoBusca('')}
+                onClick={() => {
+                  setTermoBusca('')
+                  setAnnounceMessage("Campo de busca limpo")
+                  document.getElementById("search-atendimentos")?.focus()
+                }}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                aria-label="Limpar busca"
               >
                 <i className="fas fa-times"></i>
               </button>
@@ -208,6 +339,89 @@ export default function Atendimentos() {
               </p>
             </div>
           )}
+          
+          {/* Filtros rápidos */}
+          <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-center gap-3">
+            <div className="text-sm text-gray-500 hidden md:block">
+              <i className="fas fa-filter mr-1" aria-hidden="true"></i>
+              <span>Filtros rápidos:</span>
+            </div>
+            <div className="flex flex-wrap justify-center gap-2">
+              <button 
+                onClick={() => {
+                  setTermoBusca("")
+                  setAnnounceMessage("Mostrando todos os atendimentos")
+                }}
+                className={`px-3 py-1.5 text-xs rounded-full border transition-colors ${!termoBusca ? 'bg-[#1351B4] text-white border-[#1351B4]' : 'bg-white text-gray-600 border-gray-300 hover:border-[#1351B4] hover:text-[#1351B4]'}`}
+              >
+                Todos ({atendimentos.length})
+              </button>
+              <button 
+                onClick={() => {
+                  setTermoBusca("acadêmico")
+                  setAnnounceMessage("Filtrando por atendimentos acadêmicos")
+                }}
+                className={`px-3 py-1.5 text-xs rounded-full border transition-colors ${termoBusca === "acadêmico" ? 'bg-[#1351B4] text-white border-[#1351B4]' : 'bg-white text-gray-600 border-gray-300 hover:border-[#1351B4] hover:text-[#1351B4]'}`}
+              >
+                <i className="fas fa-graduation-cap mr-1" aria-hidden="true"></i> Acadêmico
+              </button>
+              <button 
+                onClick={() => {
+                  setTermoBusca("administrativo")
+                  setAnnounceMessage("Filtrando por atendimentos administrativos")
+                }}
+                className={`px-3 py-1.5 text-xs rounded-full border transition-colors ${termoBusca === "administrativo" ? 'bg-[#1351B4] text-white border-[#1351B4]' : 'bg-white text-gray-600 border-gray-300 hover:border-[#1351B4] hover:text-[#1351B4]'}`}
+              >
+                <i className="fas fa-building mr-1" aria-hidden="true"></i> Administrativo
+              </button>
+              <button 
+                onClick={() => {
+                  setTermoBusca("ensino")
+                  setAnnounceMessage("Filtrando por atendimentos de ensino")
+                }}
+                className={`px-3 py-1.5 text-xs rounded-full border transition-colors ${termoBusca === "ensino" ? 'bg-[#1351B4] text-white border-[#1351B4]' : 'bg-white text-gray-600 border-gray-300 hover:border-[#1351B4] hover:text-[#1351B4]'}`}
+              >
+                <i className="fas fa-chalkboard-teacher mr-1" aria-hidden="true"></i> Ensino
+              </button>
+              <button 
+                onClick={() => {
+                  setTermoBusca("suporte")
+                  setAnnounceMessage("Filtrando por atendimentos de suporte")
+                }}
+                className={`px-3 py-1.5 text-xs rounded-full border transition-colors ${termoBusca === "suporte" ? 'bg-[#1351B4] text-white border-[#1351B4]' : 'bg-white text-gray-600 border-gray-300 hover:border-[#1351B4] hover:text-[#1351B4]'}`}
+              >
+                <i className="fas fa-headset mr-1" aria-hidden="true"></i> Suporte
+              </button>
+            </div>
+          </div>
+          
+          {/* Contador de resultados */}
+          {termoBusca && (
+            <div className="mt-3 text-center">
+              <span className={`${atendimentosFiltrados.length === 0 ? 'text-red-500' : 'text-[#1351B4]'} font-medium`}>
+                {atendimentosFiltrados.length === 0 
+                  ? "Nenhum atendimento encontrado" 
+                  : atendimentosFiltrados.length === 1 
+                    ? "1 atendimento encontrado" 
+                    : `${atendimentosFiltrados.length} atendimentos encontrados`}
+              </span>
+              <span className="text-gray-500 ml-1">para "{termoBusca}"</span>
+            </div>
+          )}
+
+          {/* Dicas de busca */}
+          <div className="mt-4 bg-blue-50 rounded-lg p-3 text-sm text-blue-700 flex items-start">
+            <i className="fas fa-lightbulb text-yellow-500 mt-0.5 mr-2" aria-hidden="true"></i>
+            <div>
+              <strong>Dicas de busca:</strong>
+              <ul className="mt-1 ml-4 list-disc text-xs">
+                <li>Use os filtros rápidos para encontrar categorias de atendimentos</li>
+                <li>A busca considera nome, descrição e palavras-chave relacionadas</li>
+                <li>A busca é inteligente e encontra resultados mesmo com erros de digitação</li>
+                <li>Pressione ESC para limpar a pesquisa rapidamente</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
 

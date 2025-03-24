@@ -15,10 +15,11 @@
 
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
 import { AccessibilityMenu } from "@/components/accessibility-menu"
 import { useHighContrast } from "@/components/HighContrastContext"
+import Fuse from 'fuse.js'
 
 // Definição da interface para os dados dos sistemas
 interface SystemCard {
@@ -30,6 +31,11 @@ interface SystemCard {
   detailedInfo?: string
   features?: string[]
   lastUpdate?: string
+  contato?: {
+    telefone?: string
+    email?: string
+    horario?: string
+  }
 }
 
 // Palavras-chave relacionadas para cada sistema
@@ -41,6 +47,14 @@ const palavrasRelacionadasSistemas = {
   sisplad: ['planejamento', 'desenvolvimento', 'projetos', 'estratégia', 'indicadores', 'metas', 'gestão'],
   sisprol: ['projetos', 'logística', 'recursos', 'cronograma', 'operações', 'gerenciamento', 'controle'],
   udocs: ['documentos', 'arquivo', 'gestão', 'organização', 'repositório', 'digitalização', 'processos']
+};
+
+// Palavras-chave por categorias
+const palavrasCategoria = {
+  sistema: ['sistema', 'plataforma', 'ferramenta', 'software', 'aplicativo', 'tecnologia', 'digital'],
+  gestao: ['gestão', 'gerenciamento', 'administração', 'controle', 'supervisão', 'monitoramento'],
+  documentos: ['documentos', 'arquivos', 'registro', 'formulário', 'repositório', 'digitalização'],
+  atendimento: ['atendimento', 'suporte', 'ajuda', 'assistência', 'apoio', 'serviço', 'contato', 'central', 'ouvidoria', 'helpdesk']
 };
 
 export default function SystemCards() {
@@ -118,6 +132,141 @@ export default function SystemCards() {
       features: ["Repositório centralizado", "Controle de acesso", "Versionamento de documentos", "Fluxos de aprovação"],
       lastUpdate: "25/03/2023"
     },
+    {
+      id: "atendimento-ctic",
+      title: "Atendimento CTIC",
+      description: "Suporte e atendimento para questões de tecnologia e inovação",
+      icon: "fas fa-laptop-code",
+      color: "#1351B4",
+      detailedInfo: "Central de atendimento especializada em tecnologia e inovação, oferecendo suporte para sistemas, infraestrutura e recursos tecnológicos.",
+      features: ["Suporte a sistemas", "Infraestrutura de TI", "Recursos tecnológicos", "Treinamentos em TI"],
+      lastUpdate: "01/04/2023",
+      contato: {
+        telefone: "(94) 2101-7100",
+        email: "ctic@unifesspa.edu.br",
+        horario: "Segunda a Sexta: 08h às 18h"
+      }
+    },
+    {
+      id: "atendimento-crca",
+      title: "Atendimento CRCA",
+      description: "Suporte para questões de recursos humanos e administrativas",
+      icon: "fas fa-users-cog",
+      color: "#2670E8",
+      detailedInfo: "Central de atendimento para questões relacionadas a recursos humanos, administrativas e carreiras.",
+      features: ["Folha de pagamento", "Férias e licenças", "Benefícios", "Documentação RH"],
+      lastUpdate: "01/04/2023",
+      contato: {
+        telefone: "(94) 2101-7102",
+        email: "crca@unifesspa.edu.br",
+        horario: "Segunda a Sexta: 08h às 17h"
+      }
+    },
+    {
+      id: "atendimento-progep",
+      title: "Atendimento PROGEP",
+      description: "Suporte para gestão de pessoas e desenvolvimento",
+      icon: "fas fa-user-tie",
+      color: "#1351B4",
+      detailedInfo: "Central de atendimento especializada em gestão de pessoas, desenvolvimento organizacional e capacitação.",
+      features: ["Desenvolvimento organizacional", "Capacitação", "Gestão de pessoas", "Programas de desenvolvimento"],
+      lastUpdate: "01/04/2023",
+      contato: {
+        telefone: "(94) 2101-7103",
+        email: "progep@unifesspa.edu.br",
+        horario: "Segunda a Sexta: 08h às 18h"
+      }
+    },
+    {
+      id: "atendimento-sinfra",
+      title: "Atendimento SINFRA",
+      description: "Suporte para infraestrutura e manutenção",
+      icon: "fas fa-building",
+      color: "#2670E8",
+      detailedInfo: "Central de atendimento para questões de infraestrutura, manutenção e obras da instituição.",
+      features: ["Manutenção predial", "Obras", "Infraestrutura", "Serviços gerais"],
+      lastUpdate: "01/04/2023",
+      contato: {
+        telefone: "(94) 2101-7104",
+        email: "sinfra@unifesspa.edu.br",
+        horario: "Segunda a Sexta: 08h às 18h"
+      }
+    },
+    {
+      id: "atendimento-proeg",
+      title: "Atendimento PROEG",
+      description: "Suporte para ensino de graduação",
+      icon: "fas fa-graduation-cap",
+      color: "#1351B4",
+      detailedInfo: "Central de atendimento especializada em questões relacionadas ao ensino de graduação.",
+      features: ["Matrículas", "Histórico acadêmico", "Grade curricular", "Programas de ensino"],
+      lastUpdate: "01/04/2023",
+      contato: {
+        telefone: "(94) 2101-7105",
+        email: "proeg@unifesspa.edu.br",
+        horario: "Segunda a Sexta: 08h às 18h"
+      }
+    },
+    {
+      id: "atendimento-propit",
+      title: "Atendimento PROPIT",
+      description: "Suporte para pesquisa e inovação tecnológica",
+      icon: "fas fa-flask",
+      color: "#2670E8",
+      detailedInfo: "Central de atendimento para questões relacionadas à pesquisa e inovação tecnológica.",
+      features: ["Projetos de pesquisa", "Inovação tecnológica", "Bolsas de pesquisa", "Publicações"],
+      lastUpdate: "01/04/2023",
+      contato: {
+        telefone: "(94) 2101-7106",
+        email: "propit@unifesspa.edu.br",
+        horario: "Segunda a Sexta: 08h às 18h"
+      }
+    },
+    {
+      id: "atendimento-proex",
+      title: "Atendimento PROEX",
+      description: "Suporte para extensão universitária",
+      icon: "fas fa-hands-helping",
+      color: "#1351B4",
+      detailedInfo: "Central de atendimento especializada em extensão universitária e projetos sociais.",
+      features: ["Projetos de extensão", "Ações sociais", "Eventos", "Parcerias comunitárias"],
+      lastUpdate: "01/04/2023",
+      contato: {
+        telefone: "(94) 2101-7107",
+        email: "proex@unifesspa.edu.br",
+        horario: "Segunda a Sexta: 08h às 18h"
+      }
+    },
+    {
+      id: "atendimento-proad",
+      title: "Atendimento PROAD",
+      description: "Suporte para administração acadêmica",
+      icon: "fas fa-university",
+      color: "#2670E8",
+      detailedInfo: "Central de atendimento para questões administrativas e acadêmicas.",
+      features: ["Gestão acadêmica", "Processos administrativos", "Documentação acadêmica", "Serviços acadêmicos"],
+      lastUpdate: "01/04/2023",
+      contato: {
+        telefone: "(94) 2101-7108",
+        email: "proad@unifesspa.edu.br",
+        horario: "Segunda a Sexta: 08h às 18h"
+      }
+    },
+    {
+      id: "atendimento-naia",
+      title: "Atendimento NAIA",
+      description: "Suporte para assuntos estudantis",
+      icon: "fas fa-user-graduate",
+      color: "#1351B4",
+      detailedInfo: "Central de atendimento especializada em assuntos estudantis e apoio ao discente.",
+      features: ["Assistência estudantil", "Apoio ao discente", "Programas estudantis", "Serviços ao estudante"],
+      lastUpdate: "01/04/2023",
+      contato: {
+        telefone: "(94) 2101-7109",
+        email: "naia@unifesspa.edu.br",
+        horario: "Segunda a Sexta: 08h às 18h"
+      }
+    }
   ]
 
   // =========================================================================
@@ -128,6 +277,23 @@ export default function SystemCards() {
   const [fontSize, setFontSize] = useState(16)
   const [expandedCard, setExpandedCard] = useState<string | null>(null)
   const [announceMessage, setAnnounceMessage] = useState("")
+
+  // Configuração do Fuse.js para busca com tolerância a erros
+  const fuseOptions = {
+    includeScore: true,
+    threshold: 0.4, // Tolerância a erros (0 = correspondência exata, 1 = correspondência muito flexível)
+    keys: [
+      { name: 'title', weight: 2 }, // Peso maior para o título
+      { name: 'description', weight: 1.5 }, // Peso médio para descrição
+      'detailedInfo', 
+      'features'
+    ],
+    ignoreLocation: true,
+    useExtendedSearch: true
+  };
+
+  // Criar instância do Fuse.js uma vez na montagem ou quando systems mudar
+  const fuse = useMemo(() => new Fuse(systems, fuseOptions), [systems]);
 
   // Função para alternar a expansão de um card
   const toggleCardExpansion = (id: string) => {
@@ -154,40 +320,106 @@ export default function SystemCards() {
   // Função para verificar se um termo está relacionado a um sistema
   const verificarTermoRelacionado = (termo: string, systemId: string) => {
     const termoLower = termo.toLowerCase();
-    const palavras = palavrasRelacionadasSistemas[systemId as keyof typeof palavrasRelacionadasSistemas] || [];
     
-    return palavras.some(palavra => 
+    // Verificar nas palavras-chave específicas do sistema
+    const palavras = palavrasRelacionadasSistemas[systemId as keyof typeof palavrasRelacionadasSistemas] || [];
+    const matchPalavras = palavras.some(palavra => 
       palavra.toLowerCase().includes(termoLower) || 
       termoLower.includes(palavra.toLowerCase())
     );
+    
+    // Verificar nas palavras-chave por categoria
+    const matchCategoria = Object.entries(palavrasCategoria).some(([categoria, palavras]) => {
+      // Se o termo for uma categoria específica (como "atendimento"), verificamos se o sistema tem relação
+      if (categoria === termoLower) {
+        const system = systems.find(s => s.id === systemId);
+        if (!system) return false;
+        
+        // Verificar se o sistema tem alguma palavra da categoria no título ou descrição
+        return palavras.some(palavra => 
+          system.title.toLowerCase().includes(palavra) || 
+          system.description.toLowerCase().includes(palavra) ||
+          (system.detailedInfo && system.detailedInfo.toLowerCase().includes(palavra)) ||
+          (system.features && system.features.some(feature => feature.toLowerCase().includes(palavra)))
+        );
+      }
+      
+      // Se for outra busca, verificamos nas palavras da categoria
+      return palavras.some(palavra => 
+        palavra.toLowerCase() === termoLower || 
+        palavra.toLowerCase().includes(termoLower) || 
+        termoLower.includes(palavra.toLowerCase())
+      );
+    });
+    
+    return matchPalavras || matchCategoria;
   };
 
-  // Filtrar sistemas com base no termo de busca
-  const filteredSystems = systems.filter((system) => {
-    if (!searchTerm) return true;
+  // Filtrar sistemas com base no termo de busca usando Fuse.js
+  const filteredSystems = useMemo(() => {
+    if (!searchTerm) return systems.filter(system => !system.id.startsWith('atendimento-'));
     
     const searchTermLower = searchTerm.toLowerCase().trim();
-    const searchTerms = searchTermLower.split(/\s+/).filter(term => term.length > 0);
     
-    // Se não houver termos válidos após a divisão, retorne todos os sistemas
-    if (searchTerms.length === 0) return true;
+    // Se não houver termos válidos após o trim, retorne todos os sistemas (exceto atendimentos)
+    if (searchTermLower.length === 0) return systems.filter(system => !system.id.startsWith('atendimento-'));
     
-    // Verifica se todos os termos de busca estão presentes em pelo menos um dos campos
-    return searchTerms.every(term => 
-      system.title.toLowerCase().includes(term) ||
-      system.description.toLowerCase().includes(term) ||
-      (system.detailedInfo && system.detailedInfo.toLowerCase().includes(term)) ||
-      (system.features && system.features.some(feature => feature.toLowerCase().includes(term))) ||
-      verificarTermoRelacionado(term, system.id) // Adiciona verificação de termos relacionados
-    );
-  });
+    // Se o termo de busca for "atendimento", retorne apenas os cards de atendimento
+    if (searchTermLower === "atendimento") {
+      return systems.filter(system => system.id.startsWith('atendimento-'));
+    }
+    
+    // Realizar busca com Fuse.js apenas nos sistemas não-atendimento
+    const sistemasNaoAtendimento = systems.filter(system => !system.id.startsWith('atendimento-'));
+    const fuse = new Fuse(sistemasNaoAtendimento, fuseOptions);
+    const fuseResults = fuse.search(searchTermLower);
+    
+    // Se não encontrarmos resultados com Fuse, tente verificar termos relacionados
+    if (fuseResults.length === 0) {
+      return sistemasNaoAtendimento.filter(system => {
+        return Object.entries(palavrasCategoria).some(([categoria, palavras]) => {
+          if (categoria === searchTermLower) {
+            return palavras.some(palavra => 
+              system.title.toLowerCase().includes(palavra) || 
+              system.description.toLowerCase().includes(palavra) ||
+              (system.detailedInfo && system.detailedInfo.toLowerCase().includes(palavra)) ||
+              (system.features && system.features.some(feature => feature.toLowerCase().includes(palavra)))
+            );
+          }
+          
+          return palavras.some(palavra => 
+            (palavra.toLowerCase() === searchTermLower || 
+            palavra.toLowerCase().includes(searchTermLower) || 
+            searchTermLower.includes(palavra.toLowerCase())) &&
+            (system.title.toLowerCase().includes(palavra) || 
+            system.description.toLowerCase().includes(palavra) ||
+            (system.detailedInfo && system.detailedInfo.toLowerCase().includes(palavra)) ||
+            (system.features && system.features.some(feature => feature.toLowerCase().includes(palavra))))
+          );
+        }) || verificarTermoRelacionado(searchTermLower, system.id);
+      });
+    }
+    
+    // Processar resultados do Fuse (converta para array de sistemas)
+    return fuseResults.map(result => result.item);
+  }, [searchTerm, systems]);
 
   // Verificar se um card corresponde exatamente ao termo de busca (para destaque)
   const isExactMatch = (system: SystemCard) => {
-    if (!searchTerm) return false
-    const searchTermLower = searchTerm.toLowerCase().trim()
+    if (!searchTerm) return false;
+    const searchTermLower = searchTerm.toLowerCase().trim();
+    
+    // Usando fuse para obter uma pontuação
+    const searchResult = fuse.search(searchTermLower).find(result => result.item.id === system.id);
+    
+    // Se a pontuação for muito baixa (alta correspondência), considere como correspondência exata
+    if (searchResult && searchResult.score !== undefined && searchResult.score < 0.2) {
+      return true;
+    }
+    
+    // Mantém a verificação original como fallback
     return system.title.toLowerCase() === searchTermLower || 
-           system.title.toLowerCase().startsWith(searchTermLower + ' ')
+           system.title.toLowerCase().startsWith(searchTermLower + ' ');
   }
 
   // =========================================================================
@@ -609,20 +841,6 @@ export default function SystemCards() {
                   </div>
                 </div>
               </div>
-              <div className="hidden md:block md:ml-6 md:pl-6 md:border-l border-gray-200">
-                <div className="flex flex-col items-center justify-center bg-gray-50 p-4 rounded-md shadow-sm">
-                  <div className="mb-2 text-center">
-                    <i className="fas fa-question-circle text-[#1351B4] text-3xl mb-2" aria-hidden="true"></i>
-                    <h3 className="font-semibold text-[#071D41]">Central de Suporte</h3>
-                  </div>
-                  <a 
-                    href="/atendimentos" 
-                    className="text-sm text-white bg-[#1351B4] hover:bg-[#071D41] transition-colors px-4 py-2 rounded-md w-full text-center mt-2"
-                  >
-                    Acessar todos os atendimentos
-                  </a>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -670,9 +888,9 @@ export default function SystemCards() {
                         setAnnounceMessage("Filtrando por gestão")
                         document.getElementById("search-systems")?.focus()
                       }}
-                      className={`px-3 py-1.5 text-xs rounded-full border transition-colors ${searchTerm === "gestão" ? 'bg-[#1351B4] text-white border-[#1351B4]' : 'bg-white text-gray-600 border-gray-300 hover:border-[#1351B4] hover:text-[#1351B4]'}`}
+                      className={`px-3 py-1.5 text-xs rounded-full border transition-colors flex items-center ${searchTerm === "gestão" ? 'bg-[#1351B4] text-white border-[#1351B4]' : 'bg-white text-gray-600 border-gray-300 hover:border-[#1351B4] hover:text-[#1351B4]'}`}
                     >
-                      <i className="fas fa-tasks mr-1" aria-hidden="true"></i> Gestão
+                      <i className="fas fa-cogs mr-1" aria-hidden="true"></i> Gestão
                     </button>
                     <button 
                       onClick={() => {
@@ -680,9 +898,19 @@ export default function SystemCards() {
                         setAnnounceMessage("Filtrando por documentos")
                         document.getElementById("search-systems")?.focus()
                       }}
-                      className={`px-3 py-1.5 text-xs rounded-full border transition-colors ${searchTerm === "documentos" ? 'bg-[#1351B4] text-white border-[#1351B4]' : 'bg-white text-gray-600 border-gray-300 hover:border-[#1351B4] hover:text-[#1351B4]'}`}
+                      className={`px-3 py-1.5 text-xs rounded-full border transition-colors flex items-center ${searchTerm === "documentos" ? 'bg-[#1351B4] text-white border-[#1351B4]' : 'bg-white text-gray-600 border-gray-300 hover:border-[#1351B4] hover:text-[#1351B4]'}`}
                     >
-                      <i className="fas fa-file-alt mr-1" aria-hidden="true"></i> Documentos
+                      <i className="fas fa-cogs mr-1" aria-hidden="true"></i> Documentos
+                    </button>
+                    <button 
+                      onClick={() => {
+                        setSearchTerm("atendimento")
+                        setAnnounceMessage("Filtrando por atendimentos")
+                        document.getElementById("search-systems")?.focus()
+                      }}
+                      className={`px-3 py-1.5 text-xs rounded-full border transition-colors ${searchTerm === "atendimento" ? 'bg-[#1351B4] text-white border-[#1351B4]' : 'bg-white text-gray-600 border-gray-300 hover:border-[#1351B4] hover:text-[#1351B4]'}`}
+                    >
+                      <i className="fas fa-headset mr-1" aria-hidden="true"></i> Atendimentos
                     </button>
                   </div>
                 </div>
@@ -770,6 +998,7 @@ export default function SystemCards() {
                     <ul className="mt-1 ml-4 list-disc text-xs">
                       <li>Use múltiplas palavras para refinar sua busca (ex: "sistema acadêmico")</li>
                       <li>A busca considera nome, descrição e funcionalidades dos sistemas</li>
+                      <li>A busca é inteligente e encontra resultados mesmo com erros de digitação</li>
                       <li>Pressione ESC para limpar a pesquisa rapidamente</li>
                     </ul>
                   </div>
@@ -798,106 +1027,137 @@ export default function SystemCards() {
                   </button>
                 </div>
               ) : (
-                filteredSystems.map((system) => (
-                  <div
-                    key={system.id}
-                    className={`bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group relative h-full ${
-                      isExactMatch(system) ? 'border-[#2670E8] ring-2 ring-[#2670E8]/20 animate-pulse-light' : 'hover:border-[#2670E8]'
-                    }`}
-                    aria-labelledby={`system-title-${system.id}`}
-                  >
-                    {/* Indicador de sistema com gradiente e animação */}
-                    <div 
-                      className="absolute top-0 left-0 w-2 h-full group-hover:w-3 transition-all duration-300" 
-                      style={{ 
-                        background: `linear-gradient(to bottom, ${system.color}, ${system.color}99)` 
-                      }}
-                    ></div>
-                    
-                    {/* Cabeçalho do card com ícone e título */}
-                    <div 
-                      className="p-5 border-b border-gray-100 flex items-center justify-between cursor-pointer relative pl-6 hover:bg-gray-50/50 transition-colors"
-                      style={{ minHeight: "6rem" }}
-                      onClick={() => toggleCardExpansion(system.id)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault()
-                          toggleCardExpansion(system.id)
-                        }
-                      }}
-                      tabIndex={0}
-                      role="button"
-                      aria-expanded={isCardExpanded(system.id)}
-                      aria-controls={`card-content-${system.id}`}
+                <>
+                  {filteredSystems.map((system) => (
+                    <div
+                      key={system.id}
+                      className={`bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group relative h-full ${
+                        isExactMatch(system) ? 'border-[#2670E8] ring-2 ring-[#2670E8]/20 animate-pulse-light' : 'hover:border-[#2670E8]'
+                      }`}
+                      aria-labelledby={`system-title-${system.id}`}
                     >
-                      <div className="flex items-center">
-                        <div
-                          className="w-12 h-12 flex items-center justify-center text-white rounded-lg mr-3 shadow-md group-hover:scale-110 transition-transform duration-300"
-                          style={{ 
-                            background: `linear-gradient(135deg, ${system.color}, ${system.color}DD)`,
-                            boxShadow: `0 4px 10px ${system.color}33`
-                          }}
-                        aria-hidden="true"
+                      {/* Indicador de sistema com gradiente e animação */}
+                      <div 
+                        className="absolute top-0 left-0 w-2 h-full group-hover:w-3 transition-all duration-300" 
+                        style={{ 
+                          background: `linear-gradient(to bottom, ${system.color}, ${system.color}99)` 
+                        }}
+                      ></div>
+                      
+                      {/* Cabeçalho do card com ícone e título */}
+                      <div 
+                        className="p-5 border-b border-gray-100 flex items-center justify-between cursor-pointer relative pl-6 hover:bg-gray-50/50 transition-colors"
+                        style={{ minHeight: "6rem" }}
+                        onClick={() => toggleCardExpansion(system.id)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault()
+                            toggleCardExpansion(system.id)
+                          }
+                        }}
+                        tabIndex={0}
+                        role="button"
+                        aria-expanded={isCardExpanded(system.id)}
+                        aria-controls={`card-content-${system.id}`}
                       >
-                        <i className={system.icon} style={{ fontSize: "1.5rem" }}></i>
-                      </div>
-                        <div>
-                          <h3 
-                            id={`system-title-${system.id}`} 
-                            className="font-bold text-[#071D41] group-hover:text-[#1351B4] transition-colors"
-                          >
-                        {system.title}
-                      </h3>
-                          <div className="text-xs text-gray-500 mt-0.5 flex items-center">
-                    </div>
+                        <div className="flex items-center">
+                          <div
+                            className="w-12 h-12 flex items-center justify-center text-white rounded-lg mr-3 shadow-md group-hover:scale-110 transition-transform duration-300"
+                            style={{ 
+                              background: `linear-gradient(135deg, ${system.color}, ${system.color}DD)`,
+                              boxShadow: `0 4px 10px ${system.color}33`
+                            }}
+                          aria-hidden="true"
+                        >
+                          <i className={system.icon} style={{ fontSize: "1.5rem" }}></i>
+                        </div>
+                          <div>
+                            <h3 
+                              id={`system-title-${system.id}`} 
+                              className="font-bold text-[#071D41] group-hover:text-[#1351B4] transition-colors"
+                            >
+                          {system.title}
+                        </h3>
+                            <div className="text-xs text-gray-500 mt-0.5 flex items-center">
+                        </div>
+                          </div>
+                        </div>
+                        <div 
+                          className="text-gray-500 bg-gray-50 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-[#1351B4]/10 group-hover:text-[#1351B4] shadow-sm"
+                        >
+                          <i className="fas fa-chevron-down text-sm" aria-hidden="true"></i>
                         </div>
                       </div>
-                      <div 
-                        className="text-gray-500 bg-gray-50 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-[#1351B4]/10 group-hover:text-[#1351B4] shadow-sm"
-                      >
-                        <i className="fas fa-chevron-down text-sm" aria-hidden="true"></i>
+                      
+                      {/* Descrição e botão de acesso */}
+                      <div className="p-5 flex-grow flex flex-col justify-between relative pl-6" style={{ minHeight: "12rem" }}>
+                        <div>
+                          <div className="bg-gray-50 p-3 rounded-md mb-3">
+                            <p className="text-sm text-gray-600 leading-relaxed">{system.description}</p>
+                          </div>
+                          
+                          {/* Informações de contato para cards de atendimento */}
+                          {system.id.startsWith('atendimento-') && system.contato && (
+                            <div className="bg-blue-50 p-3 rounded-md">
+                              <h4 className="text-sm font-semibold text-blue-800 mb-2">Informações de Contato:</h4>
+                              <div className="space-y-2">
+                                {system.contato.telefone && (
+                                  <div className="flex items-center text-sm">
+                                    <i className="fas fa-phone text-blue-600 w-5" aria-hidden="true"></i>
+                                    <span className="text-gray-700">{system.contato.telefone}</span>
+                                  </div>
+                                )}
+                                {system.contato.email && (
+                                  <div className="flex items-center text-sm">
+                                    <i className="fas fa-envelope text-blue-600 w-5" aria-hidden="true"></i>
+                                    <span className="text-gray-700">{system.contato.email}</span>
+                                  </div>
+                                )}
+                                {system.contato.horario && (
+                                  <div className="flex items-center text-sm">
+                                    <i className="fas fa-clock text-blue-600 w-5" aria-hidden="true"></i>
+                                    <span className="text-gray-700">{system.contato.horario}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="mt-4 pt-2">
+                        <Link
+                          href={`/sistema/${system.id}`}
+                            className="block w-full py-3 px-4 bg-gradient-to-r from-[#1351B4] to-[#2670E8] hover:from-[#071D41] hover:to-[#1351B4] text-white text-center font-bold transition-all rounded-md focus:outline-none focus:ring-2 focus:ring-[#2670E8] focus:ring-offset-2 flex items-center justify-center group-hover:shadow-md"
+                            style={{ 
+                              boxShadow: `0 2px 8px ${system.color}33`,
+                              height: "3rem"
+                            }}
+                          aria-label={`Acessar ${system.title}`}
+                        >
+                            <span>Acessar Sistema</span>
+                          <i className="fas fa-arrow-right ml-2" aria-hidden="true"></i>
+                        </Link>
+                        </div>
+                        
+                        {/* Indicador de status ou tags */}
+                        <div className="absolute top-2 right-2 flex space-x-1">
+                          {system.id === "atena" && (
+                            <span className="">
+                              
+                           
+                            </span>
+                          )}
+                          {system.lastUpdate && new Date(system.lastUpdate.split('/').reverse().join('-')) > new Date(Date.now() - 30*24*60*60*1000) && (
+                            <span className="bg-blue-100 text-blue-800 text-xs px-1.5 py-0.5 rounded-full flex items-center">
+                              <i className="fas fa-sync-alt text-[0.6rem] mr-1" aria-hidden="true"></i>
+                              Recente
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
-                    
-                    {/* Descrição e botão de acesso */}
-                    <div className="p-5 flex-grow flex flex-col justify-between relative pl-6" style={{ minHeight: "12rem" }}>
-                      <div className="bg-gray-50 p-3 rounded-md mb-5 overflow-y-auto" style={{ height: "7rem" }}>
-                        <p className="text-sm text-gray-600 leading-relaxed">{system.description}</p>
-                      </div>
-                      
-                      <div className="mt-auto pt-2">
-                      <Link
-                        href={`/sistema/${system.id}`}
-                          className="block w-full py-3 px-4 bg-gradient-to-r from-[#1351B4] to-[#2670E8] hover:from-[#071D41] hover:to-[#1351B4] text-white text-center font-bold transition-all rounded-md focus:outline-none focus:ring-2 focus:ring-[#2670E8] focus:ring-offset-2 flex items-center justify-center group-hover:shadow-md"
-                          style={{ 
-                            boxShadow: `0 2px 8px ${system.color}33`,
-                            height: "3rem"
-                          }}
-                        aria-label={`Acessar ${system.title}`}
-                      >
-                          <span>Acessar Sistema</span>
-                        <i className="fas fa-arrow-right ml-2" aria-hidden="true"></i>
-                      </Link>
-                      </div>
-                      
-                      {/* Indicador de status ou tags */}
-                      <div className="absolute top-2 right-2 flex space-x-1">
-                        {system.id === "atena" && (
-                          <span className="">
-                            
-                         
-                          </span>
-                        )}
-                        {system.lastUpdate && new Date(system.lastUpdate.split('/').reverse().join('-')) > new Date(Date.now() - 30*24*60*60*1000) && (
-                          <span className="bg-blue-100 text-blue-800 text-xs px-1.5 py-0.5 rounded-full flex items-center">
-                            <i className="fas fa-sync-alt text-[0.6rem] mr-1" aria-hidden="true"></i>
-                            Recente
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))
+                  ))}
+                </>
               )}
             </div>
           </div>
