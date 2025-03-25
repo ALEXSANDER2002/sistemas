@@ -272,7 +272,7 @@ export default function SystemCards() {
   // =========================================================================
   // ESTADOS DO COMPONENTE
   // =========================================================================
-  const [searchTerm, setSearchTerm] = useState("")
+  const [searchTerm, setSearchTerm] = useState("sistema")
   const { highContrast, toggleHighContrast } = useHighContrast()
   const [fontSize, setFontSize] = useState(16)
   const [expandedCard, setExpandedCard] = useState<string | null>(null)
@@ -357,12 +357,12 @@ export default function SystemCards() {
 
   // Filtrar sistemas com base no termo de busca usando Fuse.js
   const filteredSystems = useMemo(() => {
-    if (!searchTerm) return systems.filter(system => !system.id.startsWith('atendimento-'));
+    if (!searchTerm) return systems; // Mostrar todos os sistemas, incluindo os de atendimento
     
     const searchTermLower = searchTerm.toLowerCase().trim();
     
-    // Se não houver termos válidos após o trim, retorne todos os sistemas (exceto atendimentos)
-    if (searchTermLower.length === 0) return systems.filter(system => !system.id.startsWith('atendimento-'));
+    // Se o termo de busca for vazio após o trim, ou for "todos", mostrar todos os sistemas
+    if (searchTermLower.length === 0 || searchTermLower === "todos") return systems;
     
     // Se o termo de busca for "atendimento", retorne apenas os cards de atendimento
     if (searchTermLower === "atendimento") {
@@ -425,6 +425,13 @@ export default function SystemCards() {
   // =========================================================================
   // EFEITOS (LIFECYCLE HOOKS)
   // =========================================================================
+
+  /**
+   * Efeito para anunciar o filtro inicial quando o componente é carregado
+   */
+  useEffect(() => {
+    setAnnounceMessage("Filtrando por sistemas")
+  }, [])
 
   /**
    * Efeito para carregar preferências salvas do usuário
@@ -864,11 +871,11 @@ export default function SystemCards() {
                   <div className="flex flex-wrap gap-2">
                     <button 
                       onClick={() => {
-                        setSearchTerm("")
+                        setSearchTerm("todos")
                         setAnnounceMessage("Mostrando todos os sistemas")
                         document.getElementById("search-systems")?.focus()
                       }}
-                      className={`px-3 py-1.5 text-xs rounded-full border transition-colors ${!searchTerm ? 'bg-[#1351B4] text-white border-[#1351B4]' : 'bg-white text-gray-600 border-gray-300 hover:border-[#1351B4] hover:text-[#1351B4]'}`}
+                      className={`px-3 py-1.5 text-xs rounded-full border transition-colors ${!searchTerm || searchTerm.toLowerCase() === "todos" ? 'bg-[#1351B4] text-white border-[#1351B4]' : 'bg-white text-gray-600 border-gray-300 hover:border-[#1351B4] hover:text-[#1351B4]'}`}
                     >
                       Todos ({systems.length})
                     </button>
@@ -933,7 +940,7 @@ export default function SystemCards() {
                     }}
                     onKeyDown={(e) => {
                       if (e.key === 'Escape') {
-                        setSearchTerm("")
+                        setSearchTerm("todos")
                         setAnnounceMessage("Pesquisa limpa, mostrando todos os sistemas")
                       }
                     }}
@@ -941,7 +948,7 @@ export default function SystemCards() {
                     {searchTerm && (
                       <button 
                         onClick={() => {
-                          setSearchTerm("")
+                          setSearchTerm("todos")
                           setAnnounceMessage("Pesquisa limpa, mostrando todos os sistemas")
                           document.getElementById("search-systems")?.focus()
                         }}
@@ -1018,7 +1025,7 @@ export default function SystemCards() {
                   <p className="text-gray-600">Nenhum sistema encontrado com o termo "{searchTerm}"</p>
                   <button
                     onClick={() => {
-                      setSearchTerm("")
+                      setSearchTerm("todos")
                       setAnnounceMessage("Pesquisa limpa, mostrando todos os sistemas")
                     }}
                     className="mt-4 text-[#1351B4] hover:underline focus:outline-none focus:ring-2 focus:ring-[#2670E8] focus:ring-offset-2 rounded-sm px-2 py-1"
