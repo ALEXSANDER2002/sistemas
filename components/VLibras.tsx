@@ -1,7 +1,5 @@
 'use client'
 
-import VLibras from '@djpfs/react-vlibras'
+import VLibras from "@djpfs/react-vlibras";
 
-export default function VLibrasComponent() {
-  return <VLibras />
-} 
+export default VLibras; 
