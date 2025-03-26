@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import VLibras from '@djpfs/react-vlibras'
+import VLibras from '@/components/VLibras'
 import Card from '@/components/Card'
 
 function App() {
