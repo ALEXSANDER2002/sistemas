@@ -1039,7 +1039,7 @@ export default function SystemCards() {
                     <div
                       key={system.id}
                       className={`bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group relative h-full ${
-                        isExactMatch(system) ? 'border-[#2670E8] ring-2 ring-[#2670E8]/20 animate-pulse-light' : 'hover:border-[#2670E8]'
+                        isExactMatch(system) ? 'border-[#2670E8] ring-2 ring-[#2670E8]/20' : 'hover:border-[#2670E8]'
                       }`}
                       aria-labelledby={`system-title-${system.id}`}
                     >
