@@ -2,6 +2,7 @@ import './globals.css'
 import './styles/high-contrast.css'
 import { HighContrastProvider } from '@/components/HighContrastContext'
 import { ThemeProvider } from "@/components/theme-provider"
+import VLibras from '@/components/VLibras'
 import { externalLinks } from './config/external-links'
 import type { Metadata } from "next"
 
@@ -33,6 +34,7 @@ export default function RootLayout({
         <HighContrastProvider>
           <ThemeProvider>
             {children}
+            <VLibras />
           </ThemeProvider>
         </HighContrastProvider>
       </body>

@@ -195,7 +195,7 @@ export default function Atendimentos() {
 
   // Filtra os atendimentos com base no termo de busca usando Fuse.js
   const atendimentosFiltrados = useMemo(() => {
-    if (!termoBusca) return atendimentos;
+    if (!termoBusca || termoBusca.toLowerCase() === "todos") return atendimentos;
 
     const termoLower = termoBusca.toLowerCase().trim();
     
