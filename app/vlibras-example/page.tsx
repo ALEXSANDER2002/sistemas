@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import '../globals.css'
 import VLibras from '@/components/VLibras'
 import Card from '@/components/Card'
 
