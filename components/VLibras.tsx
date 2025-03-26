@@ -1,16 +1,7 @@
 'use client'
 
-import VLibrasComponent from './vlibras-import'
-import { useEffect, useState } from 'react'
+import VLibras from '@djpfs/react-vlibras'
 
-export default function VLibras() {
-  const [mounted, setMounted] = useState(false)
-  
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-  
-  if (!mounted) return null
-  
-  return <VLibrasComponent />
+export default function VLibrasComponent() {
+  return <VLibras />
 } 
