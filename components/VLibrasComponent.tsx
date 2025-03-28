@@ -1,7 +1,15 @@
 'use client'
 
-import VLibras from '@djpfs/react-vlibras'
+import { useEffect } from 'react'
 
 export default function VLibrasComponent() {
-  return <VLibras forceOnload={true} />
+  useEffect(() => {
+    // @ts-ignore
+    if (window.vlibras) {
+      // @ts-ignore
+      window.vlibras.init()
+    }
+  }, [])
+
+  return null
 } 
