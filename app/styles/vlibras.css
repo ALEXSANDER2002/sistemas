@@ -7,4 +7,24 @@
 .vw-plugin-wrapper {
   position: fixed !important;
   z-index: 9999 !important;
+}
+
+div#vlibras-widget {
+  z-index: 9999;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
+.vpw-settings-btn, .vpw-share-btn {
+  display: block;
+  width: auto !important;
+}
+
+div.vpw-controls {
+  z-index: 10000 !important;
+}
+
+#vlibras-translator {
+  z-index: 10000 !important;
 } 
