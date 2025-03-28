@@ -4,7 +4,6 @@ import './styles/vlibras.css'
 import { HighContrastProvider } from '@/components/HighContrastContext'
 import { ThemeProvider } from "@/components/theme-provider"
 import VLibrasComponent from '@/components/VLibrasComponent'
-import VLibrasScript from '@/components/VLibrasScript'
 import { externalLinks } from './config/external-links'
 import type { Metadata } from "next"
 
@@ -31,7 +30,6 @@ export default function RootLayout({
           crossOrigin={externalLinks.fontAwesome.crossOrigin}
           referrerPolicy={externalLinks.fontAwesome.referrerPolicy}
         />
-        <VLibrasScript />
       </head>
       <body>
         <HighContrastProvider>
