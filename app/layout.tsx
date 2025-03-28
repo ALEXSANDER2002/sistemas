@@ -6,7 +6,6 @@ import { ThemeProvider } from "@/components/theme-provider"
 import VLibrasComponent from '@/components/VLibrasComponent'
 import { externalLinks } from './config/external-links'
 import type { Metadata } from "next"
-import Script from 'next/script'
 
 export const metadata: Metadata = {
   title: 'UNIFESSPA - Sistemas Institucionais',
@@ -30,12 +29,6 @@ export default function RootLayout({
           integrity={externalLinks.fontAwesome.integrity}
           crossOrigin={externalLinks.fontAwesome.crossOrigin}
           referrerPolicy={externalLinks.fontAwesome.referrerPolicy}
-        />
-        <Script
-          src="https://vlibras.gov.br/app/vlibras-plugin.js"
-          strategy="afterInteractive"
-          crossOrigin="anonymous"
-          referrerPolicy="no-referrer"
         />
       </head>
       <body>
