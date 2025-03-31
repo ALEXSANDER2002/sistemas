@@ -1,66 +1,27 @@
-/* VLibras styling */
-div[vw].enabled {
+/* VLibras styling - versão simplificada para evitar bugs */
+/* Removendo estilos que podem estar causando conflitos e mantendo apenas os essenciais */
+
+/* Garante que o botão do VLibras esteja sempre visível e na posição correta */
+div[vw].enabled,
+div[vw-plugin],
+div[vw="plugin"] {
+  z-index: 9999 !important;
   position: fixed !important;
   bottom: 0 !important;
   right: 0 !important;
-  z-index: 9999 !important;
-  display: block !important;
   width: auto !important;
   height: auto !important;
 }
 
-div[vw-access-button].active {
-  position: relative !important;
-  display: block !important;
-  width: 50px !important;
-  height: 50px !important;
-  margin: 10px !important;
-  background-color: #4e9bff !important;
-  border-radius: 50% !important;
-  cursor: pointer !important;
-}
-
-div[vw-plugin-wrapper] {
-  position: relative !important;
-  z-index: 10000 !important;
-}
-
+/* Garante que os controles estejam acima de outros elementos */
+div[vw-plugin-wrapper],
+div[vw-access-button],
+div.vp-box,
+div.vpw-settings-btn, 
+div.vpw-share-btn,
+.vpc-loading,
 .vw-plugin-top-wrapper {
-  position: relative !important;
-  z-index: 10001 !important;
-}
-
-.vp-box {
   z-index: 10000 !important;
-}
-
-.vpw-settings-btn, .vpw-share-btn {
-  display: block !important;
-  width: auto !important;
-}
-
-.vpc-loading {
-  display: block !important;
-  z-index: 10001 !important;
-}
-
-.access-button {
-  display: block !important;
-  width: 50px !important;
-  height: 50px !important;
-  border-radius: 50% !important;
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTIwLjIwMSAyNS4zMjRjLTEuOTYzLTIuNTYyLTQuMTM5LTUuNTIzLTQuNzItNy4wMjUgMCAyLjYxMy0xLjgzNyA3LjU2LTIuODkgOS42MzlsLjQ2My40NTZjLjYxOCAxLjkyNSAxLjczNSAzLjcxMyAzLjMxOCA1LjI5NGwtLjgyOSA0LjU3MXMzLjM1OSAxLjU2MiA0LjEyLjM0YTkxLjQyIDkxLjQyIDAgMCAxIDMuODU0LTYuMTMzYy0uMzQ1IDMuNDUxLTEuNTQgNi40MjItMy42MzcgOC41MjFsMi42NS4xOWMxLjU5LTEuMzg0IDIuOTQ0LTMuMTA2IDQuMDAyLTUuMDk5IDEuNzcxLTMuMzMgMi4zNjUtNy43MzIgMi4zNjUtNy43MzJsLTQuNDkzLTUulDIyLjMxMmMyNC42NDNhMTkuNDQgMTkuNDQgMCAwIDAgMS43MjQtMy4xOTVjLTEuNjEgMS4wMTEtMy42MjMgMS45MzQtMy42MjMgMS45MzRzLjk4NC0yLjE1NCAxLjQ4Mi00LjM0NWMuNDk4LTIuMTkyLjU5Ni00Ljc5Mi41MTktNi4wMzYgMCAwLTIuNDA1LjM5OC0zLjIxMy42NzV6Ii8+PHBhdGggZD0iTTIwLjA4OCAwQzguOTk1IDAgMCA4Ljk5NCAwIDIwLjA4OGMwIDExLjA5MyA4Ljk5NiAyMC4wODcgMjAuMDg4IDIwLjA4NyAxMS4wOTIgMCAyMC4wODctOC45OTQgMjAuMDg3LTIwLjA4N1MzMS4xOCAwIDIwLjA4OCAwem0wIDM3Ljg3N2MtOS44MSAwLTE3Ljc5LTcuOTgtMTcuNzktMTcuNzkgMC05LjgxIDcuOTgtMTcuNzkgMTcuNzktMTcuNzkgOS44MDkgMCAxNy43ODkgNy45OCAxNy43ODkgMTcuNzkgMCA5LjgxLTcuOTggMTcuNzktMTcuNzg5IDE3Ljc5eiIvPjwvc3ZnPg==") !important;
-  background-size: 60% !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-}
-
-#vlibras-widget {
-  z-index: 9999 !important;
-  position: fixed !important;
-  bottom: 0 !important;
-  right: 0 !important;
-  display: block !important;
 }
 
 /* Estilos para o componente de desenvolvimento */

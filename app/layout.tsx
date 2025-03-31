@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import VLibrasManager from '@/components/VLibrasManager'
 import { externalLinks } from './config/external-links'
 import type { Metadata } from "next"
+import Script from 'next/script'
 
 export const metadata: Metadata = {
   title: 'UNIFESSPA - Sistemas Institucionais',
@@ -30,6 +31,7 @@ export default function RootLayout({
           crossOrigin={externalLinks.fontAwesome.crossOrigin}
           referrerPolicy={externalLinks.fontAwesome.referrerPolicy}
         />
+        <Script src="/vlibras-config.js" strategy="beforeInteractive" />
       </head>
       <body>
         <HighContrastProvider>
