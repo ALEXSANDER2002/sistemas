@@ -10,9 +10,9 @@ export default function VLibrasComponent() {
     widgetDiv.setAttribute('vw', 'plugin');
     document.body.appendChild(widgetDiv);
 
-    // Carregar o script do VLibras
+    // Carregar o script do VLibras usando o CDN fornecido
     const script = document.createElement('script');
-    script.src = 'https://vlibras.gov.br/app/vlibras-plugin.js';
+    script.src = 'https://vlibras.gov.br/app/vlibras.js';
     script.async = true;
     script.crossOrigin = 'anonymous';
     script.onload = () => {
@@ -32,7 +32,7 @@ export default function VLibrasComponent() {
         widgetDiv.remove();
       }
       
-      const scripts = document.querySelectorAll('script[src="https://vlibras.gov.br/app/vlibras-plugin.js"]');
+      const scripts = document.querySelectorAll('script[src="https://vlibras.gov.br/app/vlibras.js"]');
       scripts.forEach(script => script.remove());
     };
   }, []);
