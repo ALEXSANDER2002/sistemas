@@ -40,13 +40,13 @@ interface SystemCard {
 
 // Palavras-chave relacionadas para cada sistema
 const palavrasRelacionadasSistemas = {
-  atena: ['concurso', 'vagas', 'docente', 'edital', 'carreira', 'seleção', 'processo seletivo', 'recrutamento'],
+  atena: ['concurso', 'docente', 'processo seletivo', 'carreira', 'vagas', 'seleção', 'recrutamento', 'professor'],
   avaliacao: ['projetos', 'pesquisa', 'redes', 'desempenho', 'metas', 'avaliação', 'suporte', 'desenvolvimento'],
   coc: ['calouros', 'cadastro', 'matrícula', 'alunos', 'registro', 'dados pessoais', 'escolar', 'novos estudantes'],
   sae: ['assistência', 'auxílio', 'estudante', 'financeiro', 'suporte', 'educacional', 'benefícios', 'apoio'],
   sisplad: ['docente', 'atividades', 'planejamento', 'ensino', 'pesquisa', 'extensão', 'carga horária', 'acadêmico'],
   sisprol: ['projetos', 'online', 'pesquisa', 'extensão', 'submissão', 'execução', 'gerenciamento', 'resultados'],
-  udocs: ['documentos', 'μdocs', 'upload', 'matrícula', 'processos', 'acadêmico', 'arquivos', 'gestão']
+  udocs: ['documentos', 'habilitação', 'calouros', 'upload', 'matrícula', 'processos', 'arquivos', 'gestão']
 };
 
 // Palavras-chave por categorias
@@ -65,11 +65,11 @@ export default function SystemCards() {
     {
       id: "atena",
       title: "ATENA",
-      description: "Sistema para gestão de planos de concurso",
+      description: "Sistema de Gerenciamento de Concursos para Docentes",
       icon: "fas fa-graduation-cap",
       color: "#2670E8",
-      detailedInfo: "O ATENA é um sistema especializado na gestão de planos de concurso, permitindo o gerenciamento de vagas para carreira docente e a elaboração de editais de forma eficiente.",
-      features: ["Gestão de vagas", "Elaboração de editais", "Controle de concursos", "Carreira docente"],
+      detailedInfo: "O ATENA é um sistema especializado no gerenciamento de concursos para docentes, permitindo o controle completo do processo seletivo e gestão de vagas.",
+      features: ["Gestão de concursos", "Controle de vagas", "Processo seletivo", "Carreira docente"],
       lastUpdate: "15/03/2023"
     },
     {
@@ -104,7 +104,7 @@ export default function SystemCards() {
     },
     {
       id: "sisplad",
-      title: "Sisplad",
+      title: "SISPLAD",
       description: "Sistema de Planejamento das Atividades Docentes",
       icon: "fas fa-tasks",
       color: "#2670E8",
@@ -114,8 +114,8 @@ export default function SystemCards() {
     },
     {
       id: "sisprol",
-      title: "Sisprol",
-      description: "Sistema de Gerenciamento de Projetos Online",
+      title: "SISPROL",
+      description: "Sistema de Gerenciamento de Projetos On-line",
       icon: "fas fa-project-diagram",
       color: "#1351B4",
       detailedInfo: "Sistema integrado para gerenciamento de projetos de pesquisa e extensão, permitindo submissão e execução de projetos.",
@@ -124,12 +124,12 @@ export default function SystemCards() {
     },
     {
       id: "udocs",
-      title: "Udocs",
-      description: "μDocs, sistema de gestão de documentos",
+      title: "UDOCS",
+      description: "Sistema de Gerenciamento das documentações de habilitação dos calouros",
       icon: "fas fa-file-alt",
       color: "#2670E8",
-      detailedInfo: "Sistema especializado na gestão de documentos, com foco em carregamento e envio de documentos para matrículas e processos acadêmicos.",
-      features: ["Gestão documental", "Upload de documentos", "Processos acadêmicos", "Matrículas"],
+      detailedInfo: "Sistema especializado na gestão de documentos para habilitação de calouros, permitindo o upload e controle de documentação necessária.",
+      features: ["Gestão documental", "Upload de documentos", "Habilitação de calouros", "Controle de matrículas"],
       lastUpdate: "25/03/2023"
     },
     {
