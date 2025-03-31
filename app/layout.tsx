@@ -1,6 +1,7 @@
 import './globals.css'
 import './styles/high-contrast.css'
 import './styles/vlibras.css'
+import './styles/mobile.css'
 import { HighContrastProvider } from '@/components/HighContrastContext'
 import { ThemeProvider } from "@/components/theme-provider"
 import VLibrasManager from '@/components/VLibrasManager'

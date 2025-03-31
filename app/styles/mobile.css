@@ -1,0 +1,14 @@
+/* Estilos específicos para dispositivos móveis */
+
+/* Esconde o elemento gov.br em telas pequenas */
+@media (max-width: 768px) {
+  .gov-br-logo {
+    display: none !important;
+  }
+}
+
+/* Classe para aplicar ao elemento gov.br */
+.gov-br-logo {
+  display: flex;
+  align-items: center;
+} 

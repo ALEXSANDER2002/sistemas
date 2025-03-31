@@ -771,7 +771,7 @@ export default function SystemCards() {
                     </a>
                     <div className="h-5 border-r border-white/20"></div>
               </div>
-                  <div className="flex items-center bg-white/10 hover:bg-white/15 transition-colors rounded-md px-3 py-1.5">
+                  <div className="flex items-center bg-white/10 hover:bg-white/15 transition-colors rounded-md px-3 py-1.5 gov-br-logo">
                     <span className="text-sm font-bold mr-1">gov</span>
                     <span className="text-sm font-bold text-yellow-400">.br</span>
             </div>
