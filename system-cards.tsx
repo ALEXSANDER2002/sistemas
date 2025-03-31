@@ -40,13 +40,13 @@ interface SystemCard {
 
 // Palavras-chave relacionadas para cada sistema
 const palavrasRelacionadasSistemas = {
-  atena: ['acadêmico', 'matricula', 'notas', 'histórico', 'disciplinas', 'professor', 'aluno', 'curso', 'graduação'],
-  avaliacao: ['desempenho', 'servidor', 'avaliação', 'metas', 'objetivos', 'feedback', 'desenvolvimento', 'progresso'],
-  coc: ['documentos', 'conteúdo', 'arquivos', 'organização', 'repositório', 'pasta', 'compartilhamento'],
-  sae: ['educacional', 'acompanhamento', 'aluno', 'estudante', 'frequência', 'desempenho', 'pedagógico', 'ensino'],
-  sisplad: ['planejamento', 'desenvolvimento', 'projetos', 'estratégia', 'indicadores', 'metas', 'gestão'],
-  sisprol: ['projetos', 'logística', 'recursos', 'cronograma', 'operações', 'gerenciamento', 'controle'],
-  udocs: ['documentos', 'arquivo', 'gestão', 'organização', 'repositório', 'digitalização', 'processos']
+  atena: ['concurso', 'vagas', 'docente', 'edital', 'carreira', 'seleção', 'processo seletivo', 'recrutamento'],
+  avaliacao: ['projetos', 'pesquisa', 'redes', 'desempenho', 'metas', 'avaliação', 'suporte', 'desenvolvimento'],
+  coc: ['calouros', 'cadastro', 'matrícula', 'alunos', 'registro', 'dados pessoais', 'escolar', 'novos estudantes'],
+  sae: ['assistência', 'auxílio', 'estudante', 'financeiro', 'suporte', 'educacional', 'benefícios', 'apoio'],
+  sisplad: ['docente', 'atividades', 'planejamento', 'ensino', 'pesquisa', 'extensão', 'carga horária', 'acadêmico'],
+  sisprol: ['projetos', 'online', 'pesquisa', 'extensão', 'submissão', 'execução', 'gerenciamento', 'resultados'],
+  udocs: ['documentos', 'μdocs', 'upload', 'matrícula', 'processos', 'acadêmico', 'arquivos', 'gestão']
 };
 
 // Palavras-chave por categorias
@@ -65,71 +65,71 @@ export default function SystemCards() {
     {
       id: "atena",
       title: "ATENA",
-      description: "Sistema de gestão de conhecimento e informações acadêmicas",
+      description: "Sistema para gestão de planos de concurso",
       icon: "fas fa-graduation-cap",
       color: "#2670E8",
-      detailedInfo: "O ATENA é um sistema completo para gestão acadêmica que integra informações de alunos, professores e disciplinas em uma única plataforma.",
-      features: ["Gestão de matrículas", "Controle de notas", "Histórico acadêmico", "Planos de ensino"],
+      detailedInfo: "O ATENA é um sistema especializado na gestão de planos de concurso, permitindo o gerenciamento de vagas para carreira docente e a elaboração de editais de forma eficiente.",
+      features: ["Gestão de vagas", "Elaboração de editais", "Controle de concursos", "Carreira docente"],
       lastUpdate: "15/03/2023"
     },
     {
       id: "avaliacao",
-      title: "Avaliação de Desempenho",
-      description: "Plataforma para avaliação e acompanhamento de desempenho profissional",
+      title: "Avaliação",
+      description: "Departamento de Avaliação de Projetos e Apoio às Redes de Pesquisa",
       icon: "fas fa-chart-line",
       color: "#1351B4",
-      detailedInfo: "Sistema para avaliação periódica de servidores, permitindo feedback contínuo e acompanhamento de metas e objetivos.",
-      features: ["Avaliações 360°", "Definição de metas", "Relatórios de desempenho", "Planos de desenvolvimento"],
+      detailedInfo: "Sistema responsável pela avaliação de projetos e suporte às redes de pesquisa, com foco em desempenho e metas institucionais.",
+      features: ["Avaliação de projetos", "Suporte a redes de pesquisa", "Gestão de desempenho", "Acompanhamento de metas"],
       lastUpdate: "22/01/2023"
     },
     {
       id: "coc",
       title: "COC",
-      description: "Sistema de controle e organização de conteúdos",
+      description: "Cadastro On-line de Calouros",
       icon: "fas fa-folder",
       color: "#2670E8",
-      detailedInfo: "Plataforma para gerenciamento e organização de conteúdos institucionais, facilitando o acesso e compartilhamento de informações.",
-      features: ["Repositório de documentos", "Controle de versões", "Compartilhamento seguro", "Busca avançada"],
+      detailedInfo: "Sistema para registro e cadastro de novos alunos, facilitando a coleta de dados pessoais e escolares dos calouros.",
+      features: ["Cadastro de calouros", "Coleta de dados pessoais", "Registro escolar", "Gestão de matrículas"],
       lastUpdate: "10/02/2023"
     },
     {
       id: "sae",
       title: "SAE",
-      description: "Sistema de Acompanhamento Educacional",
+      description: "Sistema de Assistência Estudantil",
       icon: "fas fa-users",
       color: "#1351B4",
-      detailedInfo: "Ferramenta para acompanhamento do progresso educacional dos estudantes, permitindo intervenções pedagógicas personalizadas.",
-      features: ["Monitoramento de frequência", "Acompanhamento de desempenho", "Intervenções pedagógicas", "Comunicação com responsáveis"],
+      detailedInfo: "Sistema dedicado ao oferecimento de auxílios financeiros e suporte educacional para estudantes da instituição.",
+      features: ["Gestão de auxílios", "Suporte educacional", "Assistência financeira", "Acompanhamento estudantil"],
       lastUpdate: "05/04/2023"
     },
     {
       id: "sisplad",
       title: "Sisplad",
-      description: "Sistema de Planejamento e Desenvolvimento",
+      description: "Sistema de Planejamento das Atividades Docentes",
       icon: "fas fa-tasks",
       color: "#2670E8",
-      detailedInfo: "Plataforma para planejamento estratégico e acompanhamento de projetos de desenvolvimento institucional.",
-      features: ["Planejamento estratégico", "Gestão de projetos", "Indicadores de desempenho", "Relatórios gerenciais"],
+      detailedInfo: "Plataforma para planejamento e gestão das atividades docentes, abrangendo ensino, pesquisa e extensão.",
+      features: ["Planejamento docente", "Gestão de atividades", "Controle de carga horária", "Acompanhamento acadêmico"],
       lastUpdate: "18/12/2022"
     },
     {
       id: "sisprol",
       title: "Sisprol",
-      description: "Sistema de Projetos e Logística",
+      description: "Sistema de Gerenciamento de Projetos Online",
       icon: "fas fa-project-diagram",
       color: "#1351B4",
-      detailedInfo: "Sistema integrado para gerenciamento de projetos e operações logísticas da instituição.",
-      features: ["Gestão de projetos", "Controle logístico", "Alocação de recursos", "Cronogramas integrados"],
+      detailedInfo: "Sistema integrado para gerenciamento de projetos de pesquisa e extensão, permitindo submissão e execução de projetos.",
+      features: ["Gestão de projetos", "Submissão de propostas", "Execução de projetos", "Acompanhamento de resultados"],
       lastUpdate: "30/01/2023"
     },
     {
       id: "udocs",
       title: "Udocs",
-      description: "Gerenciamento e organização de documentos unificados",
+      description: "μDocs, sistema de gestão de documentos",
       icon: "fas fa-file-alt",
       color: "#2670E8",
-      detailedInfo: "Sistema centralizado para gerenciamento de documentos institucionais, com recursos avançados de busca e categorização.",
-      features: ["Repositório centralizado", "Controle de acesso", "Versionamento de documentos", "Fluxos de aprovação"],
+      detailedInfo: "Sistema especializado na gestão de documentos, com foco em carregamento e envio de documentos para matrículas e processos acadêmicos.",
+      features: ["Gestão documental", "Upload de documentos", "Processos acadêmicos", "Matrículas"],
       lastUpdate: "25/03/2023"
     },
     {
