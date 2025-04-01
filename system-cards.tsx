@@ -595,10 +595,26 @@ export default function SystemCards() {
                     aria-hidden="true"
                     role="menu"
                   >
-                    <div className="border-b border-gray-200 pb-2 mb-2">
+                    <div className="border-b border-gray-200 pb-2 mb-2 relative">
                       <h3 className="text-[#071D41] font-bold text-sm mb-1">Ajustes de visualização</h3>
                       <p className="text-gray-600 text-xs mb-2">Personalize a aparência do site para melhor visualização</p>
-              </div>
+                      
+                      {/* Botão de fechar (X) */}
+                      <button 
+                        className="absolute top-0 right-0 text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors w-6 h-6 rounded-full flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-[#1351B4]"
+                        aria-label="Fechar menu de acessibilidade"
+                        onClick={() => {
+                          const menu = document.getElementById('accessibility-dropdown');
+                          if (menu) {
+                            menu.classList.add('hidden');
+                            menu.classList.remove('flex');
+                            menu.setAttribute('aria-hidden', 'true');
+                          }
+                        }}
+                      >
+                        <i className="fas fa-times text-sm" aria-hidden="true"></i>
+                      </button>
+                    </div>
                     
                     <div className="flex flex-col gap-3">
                       {/* Contraste */}

@@ -290,4 +290,17 @@ html.high-contrast .gov-br-logo {
 
 html.high-contrast .gov-br-logo span {
   color: #ffff00 !important;
+}
+
+/* Botão de fechar (X) do menu de acessibilidade */
+html.high-contrast #accessibility-dropdown button[aria-label="Fechar menu de acessibilidade"] {
+  background-color: #000 !important;
+  color: #ffff00 !important;
+  border: 1px solid #fff !important;
+}
+
+html.high-contrast #accessibility-dropdown button[aria-label="Fechar menu de acessibilidade"]:hover {
+  background-color: #333 !important;
+  color: #fff !important;
+  border: 1px solid #ffff00 !important;
 } 
