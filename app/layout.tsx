@@ -1,5 +1,5 @@
 import './globals.css'
-import './styles/high-contrast.css'
+// O CSS de alto contraste será importado condicionalmente no componente
 import './styles/vlibras.css'
 import './styles/mobile.css'
 import { HighContrastProvider } from '@/components/HighContrastContext'
@@ -8,6 +8,7 @@ import VLibrasManager from '@/components/VLibrasManager'
 import { externalLinks } from './config/external-links'
 import type { Metadata } from "next"
 import Script from 'next/script'
+import DynamicHighContrastCSS from '@/components/DynamicHighContrastCSS'
 
 export const metadata: Metadata = {
   title: 'UNIFESSPA - Sistemas Institucionais',
@@ -37,6 +38,8 @@ export default function RootLayout({
       <body>
         <HighContrastProvider>
           <ThemeProvider>
+            {/* Carrega o CSS de alto contraste dinamicamente */}
+            <DynamicHighContrastCSS />
             {children}
             <VLibrasManager />
           </ThemeProvider>

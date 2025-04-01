@@ -1,0 +1,293 @@
+/**
+ * Arquivo CSS específico para o modo de alto contraste
+ * Este arquivo é carregado condicionalmente apenas quando o modo de alto contraste está ativo
+ */
+
+/* Aplicar cores de alto contraste ao HTML e ao corpo da página */
+html.high-contrast,
+html.high-contrast body {
+  background-color: #000 !important;
+  color: #fff !important;
+  transition: none !important;
+}
+
+/* Todos os elementos recebem fundo preto e texto branco por padrão */
+html.high-contrast *:not(i):not(.fas):not(.fab):not(.far):not(.fa) {
+  background-color: #000 !important;
+  color: #fff !important;
+  transition: none !important;
+}
+
+/* Ícones FontAwesome com cores amarelas de alto contraste */
+html.high-contrast .fas,
+html.high-contrast .fab,
+html.high-contrast .far,
+html.high-contrast .fa,
+html.high-contrast i,
+html.high-contrast [class^="fa-"],
+html.high-contrast [class*=" fa-"] {
+  color: #ffff00 !important;
+  background-color: transparent !important;
+}
+
+/* Contêineres de ícones */
+html.high-contrast .bg-\[\#1351B4\]\/10,
+html.high-contrast .bg-white\/10,
+html.high-contrast .bg-gray-50,
+html.high-contrast .bg-gray-100,
+html.high-contrast .rounded-full,
+html.high-contrast .p-1\.5,
+html.high-contrast .p-2 {
+  background-color: #000 !important;
+  border: 1px solid #fff !important;
+}
+
+/* Áreas principais */
+html.high-contrast main,
+html.high-contrast .min-h-screen,
+html.high-contrast .container,
+html.high-contrast .bg-\[#f8f8f8\] {
+  background-color: #000 !important;
+}
+
+/* Cabeçalho, rodapé e elementos de navegação */
+html.high-contrast header,
+html.high-contrast footer,
+html.high-contrast nav {
+  background-color: #000 !important;
+  border-bottom: 1px solid #fff !important;
+  border-top: 1px solid #fff !important;
+}
+
+/* Elementos com gradientes e backgrounds coloridos */
+html.high-contrast .bg-\[\#071D41\],
+html.high-contrast .bg-\[\#2670E8\],
+html.high-contrast .bg-\[\#1351B4\],
+html.high-contrast .bg-white,
+html.high-contrast .bg-gray-50,
+html.high-contrast .bg-gray-100,
+html.high-contrast .bg-\[#f8f8f8\],
+html.high-contrast .bg-gradient-to-r,
+html.high-contrast .from-\[\#071D41\],
+html.high-contrast .to-\[\#0B2B5B\],
+html.high-contrast .from-\[\#1351B4\],
+html.high-contrast .to-\[\#2670E8\] {
+  background: #000 !important;
+  background-image: none !important;
+  border: 1px solid #fff !important;
+}
+
+/* Campos de entrada */
+html.high-contrast input[type="text"],
+html.high-contrast input[type="search"],
+html.high-contrast input[type="email"],
+html.high-contrast input[type="password"] {
+  background-color: #000 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+}
+
+/* Cards de sistemas */
+html.high-contrast .group,
+html.high-contrast .card,
+html.high-contrast .bg-white {
+  background-color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+html.high-contrast .group > div,
+html.high-contrast .card > div {
+  background-color: #000 !important;
+}
+
+html.high-contrast .group:hover,
+html.high-contrast .group:focus,
+html.high-contrast .group:focus-within,
+html.high-contrast .card:hover,
+html.high-contrast .card:focus,
+html.high-contrast .card:focus-within {
+  border-color: #ffff00 !important;
+}
+
+/* Conteúdo dos cards */
+html.high-contrast .group .bg-gray-50,
+html.high-contrast .group .p-5,
+html.high-contrast .group .border-b,
+html.high-contrast .bg-blue-50,
+html.high-contrast .bg-green-50,
+html.high-contrast .bg-yellow-50,
+html.high-contrast .bg-red-50,
+html.high-contrast .rounded-md {
+  background-color: #000 !important;
+  border-color: #fff !important;
+}
+
+/* Textos coloridos */
+html.high-contrast .text-blue-700,
+html.high-contrast .text-green-700,
+html.high-contrast .text-yellow-700,
+html.high-contrast .text-red-700,
+html.high-contrast .text-white,
+html.high-contrast .text-gray-600,
+html.high-contrast .text-gray-300,
+html.high-contrast .text-gray-700,
+html.high-contrast .text-gray-500,
+html.high-contrast .text-gray-400,
+html.high-contrast .text-\[\#071D41\],
+html.high-contrast .text-blue-800,
+html.high-contrast .text-blue-600 {
+  color: #fff !important;
+}
+
+/* Links e botões */
+html.high-contrast a,
+html.high-contrast button,
+html.high-contrast [role="button"] {
+  color: #ffff00 !important;
+  text-decoration: underline !important;
+  background-color: #000 !important;
+  border: 1px solid #fff !important;
+}
+
+html.high-contrast a:hover,
+html.high-contrast button:hover,
+html.high-contrast [role="button"]:hover {
+  color: #ffffff !important;
+  background-color: #333 !important;
+}
+
+/* Botões coloridos */
+html.high-contrast .bg-\[\#1351B4\],
+html.high-contrast .hover\:bg-\[\#2670E8\],
+html.high-contrast .bg-gradient-to-r {
+  background-color: #000 !important;
+  background-image: none !important;
+  color: #ffff00 !important;
+  border: 2px solid #fff !important;
+}
+
+html.high-contrast .bg-\[\#1351B4\]:hover,
+html.high-contrast .hover\:bg-\[\#2670E8\]:hover,
+html.high-contrast .bg-gradient-to-r:hover {
+  background-color: #333 !important;
+  color: #ffff00 !important;
+}
+
+/* Estados de foco */
+html.high-contrast :focus {
+  outline: 3px solid #ffff00 !important;
+  outline-offset: 2px !important;
+}
+
+/* Barras coloridas dos cards */
+html.high-contrast .absolute.top-0.left-0.w-2,
+html.high-contrast .absolute.top-0.left-0.w-3,
+html.high-contrast .h-2.w-full.rounded-t-xl {
+  background: #ffff00 !important;
+  background-image: none !important;
+}
+
+/* Imagens e ícones */
+html.high-contrast img,
+html.high-contrast svg {
+  filter: grayscale(100%) contrast(120%) brightness(1.2) !important;
+  border: 1px solid #fff !important;
+}
+
+/* Logo específico */
+html.high-contrast img[alt="Logo UNIFESSPA"] {
+  border: 2px solid #fff !important;
+  padding: 2px !important;
+}
+
+/* Bordas */
+html.high-contrast .border,
+html.high-contrast .border-t,
+html.high-contrast .border-b,
+html.high-contrast .border-l,
+html.high-contrast .border-r,
+html.high-contrast .border-l-4,
+html.high-contrast .border-white\/30,
+html.high-contrast .border-white\/20,
+html.high-contrast .border-white\/10,
+html.high-contrast .border-gray-200,
+html.high-contrast .border-gray-100,
+html.high-contrast .border-\[\#1351B4\],
+html.high-contrast .border-\[\#FFCD07\] {
+  border-color: #fff !important;
+}
+
+/* Ícones de cards (quadrados coloridos) */
+html.high-contrast .w-12.h-12,
+html.high-contrast .w-16.h-16,
+html.high-contrast .rounded-lg {
+  background: #000 !important;
+  background-image: none !important;
+  border: 2px solid #ffff00 !important;
+}
+
+/* Ícones de recursos nos modais */
+html.high-contrast .w-6.h-6.rounded-full {
+  background: #000 !important;
+  border: 1px solid #ffff00 !important;
+}
+
+/* Blocos de informação */
+html.high-contrast .bg-white.p-6.mb-8,
+html.high-contrast .p-6.mb-8 {
+  background-color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+/* Ícone de busca */
+html.high-contrast .absolute.left-4,
+html.high-contrast .absolute.right-3 {
+  color: #ffff00 !important;
+}
+
+/* Mensagens sem resultados */
+html.high-contrast .text-center.py-10 {
+  background-color: #000 !important;
+  border: 1px solid #fff !important;
+}
+
+/* Modais */
+html.high-contrast [role="dialog"] {
+  background-color: #000 !important;
+  border: 3px solid #fff !important;
+}
+
+/* Elementos específicos */
+html.high-contrast .fixed.bottom-4.right-4,
+html.high-contrast .fixed.top-0.left-0.w-full {
+  background-color: #000 !important;
+  border: 1px solid #fff !important;
+}
+
+/* Botões de filtro */
+html.high-contrast .px-3.py-1\.5.text-xs.rounded-full {
+  border: 1px solid #fff !important;
+}
+
+html.high-contrast .px-3.py-1\.5.text-xs.rounded-full:hover,
+html.high-contrast .px-3.py-1\.5.text-xs.rounded-full:focus {
+  border-color: #ffff00 !important;
+}
+
+/* Botões de filtro ativos */
+html.high-contrast .bg-\[\#1351B4\].text-white {
+  background-color: #333 !important;
+  color: #ffff00 !important;
+  border: 1px solid #ffff00 !important;
+}
+
+/* Garantir que o elemento gov.br logo tenha alto contraste */
+html.high-contrast .gov-br-logo {
+  background-color: #000 !important;
+  border: 1px solid #fff !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast .gov-br-logo span {
+  color: #ffff00 !important;
+} 

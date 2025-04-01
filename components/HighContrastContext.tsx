@@ -11,31 +11,62 @@ const HighContrastContext = createContext<HighContrastContextType | undefined>(u
 
 export function HighContrastProvider({ children }: { children: React.ReactNode }) {
   const [highContrast, setHighContrast] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
+  // Efeito que executa apenas uma vez durante a montagem do componente
   useEffect(() => {
-    // Carregar preferência salva
-    const savedHighContrast = localStorage.getItem('highContrast');
-    if (savedHighContrast === 'true') {
-      setHighContrast(true);
-      document.documentElement.classList.add('high-contrast');
-      document.documentElement.classList.remove('normal-contrast');
+    if (typeof window !== 'undefined') {
+      try {
+        // Carregar preferência salva
+        const savedHighContrast = localStorage.getItem('highContrast');
+        const initialState = savedHighContrast === 'true';
+        
+        setHighContrast(initialState);
+        
+        // Aplicar as classes conforme o estado inicial
+        if (initialState) {
+          document.documentElement.classList.add('high-contrast');
+          document.documentElement.classList.remove('normal-contrast');
+        } else {
+          document.documentElement.classList.remove('high-contrast');
+          document.documentElement.classList.add('normal-contrast');
+        }
+        
+        // Marcar como inicializado
+        setIsInitialized(true);
+      } catch (error) {
+        console.error('Erro ao inicializar o modo de alto contraste:', error);
+        // Em caso de erro, garantir que o modo padrão seja aplicado
+        document.documentElement.classList.remove('high-contrast');
+        document.documentElement.classList.add('normal-contrast');
+        setIsInitialized(true);
+      }
     }
   }, []);
 
+  // Função para alternar o modo de alto contraste de forma segura
   const toggleHighContrast = () => {
-    setHighContrast(prev => {
-      const newState = !prev;
+    if (!isInitialized) return; // Evita alternar antes da inicialização completa
+    
+    setHighContrast(prevState => {
+      const newState = !prevState;
       
-      if (newState) {
-        document.documentElement.classList.add('high-contrast');
-        document.documentElement.classList.remove('normal-contrast');
-      } else {
-        document.documentElement.classList.add('normal-contrast');
-        document.documentElement.classList.remove('high-contrast');
+      try {
+        // Aplica as classes com base no novo estado
+        if (newState) {
+          document.documentElement.classList.add('high-contrast');
+          document.documentElement.classList.remove('normal-contrast');
+        } else {
+          document.documentElement.classList.remove('high-contrast');
+          document.documentElement.classList.add('normal-contrast');
+        }
+        
+        // Salva a preferência no localStorage
+        localStorage.setItem('highContrast', newState.toString());
+      } catch (error) {
+        console.error('Erro ao alternar o modo de alto contraste:', error);
       }
-
-      // Salvar preferência
-      localStorage.setItem('highContrast', newState.toString());
+      
       return newState;
     });
   };
