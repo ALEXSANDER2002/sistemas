@@ -20,7 +20,7 @@ export default function ChatFeedback({ onClose, onSkip }: ChatFeedbackProps) {
   }
 
   return (
-    <Card className="w-full h-[calc(100vh-2rem)] md:w-[400px] md:h-auto p-4 md:p-6 space-y-6 flex flex-col md:rounded-lg">
+    <Card className="w-full h-[calc(100vh-4rem)] md:w-[400px] md:h-auto p-4 md:p-6 space-y-6 flex flex-col md:rounded-lg">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium">Feedback</h3>

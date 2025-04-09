@@ -205,7 +205,7 @@ export default function ChatBot() {
         showFeedback ? (
           <ChatFeedback onClose={handleCloseFeedback} onSkip={handleSkipFeedback} />
         ) : (
-          <Card className="w-full h-[calc(100vh-2rem)] md:w-[400px] md:h-[600px] flex flex-col shadow-lg md:rounded-lg overflow-hidden">
+          <Card className="w-full h-[calc(100vh-4rem)] md:w-[400px] md:h-[600px] flex flex-col shadow-lg md:rounded-lg overflow-hidden">
             <div className="bg-[#0066FF] px-4 py-3 md:p-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
