@@ -20,7 +20,7 @@ export default function ChatFeedback({ onClose, onSkip }: ChatFeedbackProps) {
   }
 
   return (
-    <Card className="w-full h-[100vh] md:w-[400px] md:h-auto p-4 md:p-6 space-y-6 flex flex-col md:rounded-lg">
+    <Card className="w-full h-[calc(100vh-2rem)] md:w-[400px] md:h-auto p-4 md:p-6 space-y-6 flex flex-col md:rounded-lg">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium">Feedback</h3>
@@ -88,11 +88,11 @@ export default function ChatFeedback({ onClose, onSkip }: ChatFeedbackProps) {
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           placeholder="Compartilhe sua experiência ou sugestões..."
-          className="w-full resize-none flex-1 min-h-[120px]"
+          className="w-full resize-none flex-1 min-h-[120px] max-h-[200px]"
         />
       </div>
 
-      <div className="flex gap-2 justify-end mt-auto pt-4">
+      <div className="flex gap-2 justify-end mt-4">
         <Button
           onClick={onSkip}
           variant="outline"

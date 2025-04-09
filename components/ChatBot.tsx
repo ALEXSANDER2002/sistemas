@@ -205,7 +205,7 @@ export default function ChatBot() {
         showFeedback ? (
           <ChatFeedback onClose={handleCloseFeedback} onSkip={handleSkipFeedback} />
         ) : (
-          <Card className="w-full h-[100vh] md:w-[400px] md:h-[600px] flex flex-col shadow-lg md:rounded-lg overflow-hidden">
+          <Card className="w-full h-[calc(100vh-2rem)] md:w-[400px] md:h-[600px] flex flex-col shadow-lg md:rounded-lg overflow-hidden">
             <div className="bg-[#0066FF] px-4 py-3 md:p-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
@@ -258,7 +258,7 @@ export default function ChatBot() {
               <div ref={messagesEndRef} />
             </ScrollArea>
 
-            <div className="p-3 md:p-4 bg-white border-t flex gap-2 sticky bottom-0">
+            <div className="p-3 md:p-4 bg-white border-t flex gap-2">
               <Input
                 value={input}
                 onChange={e => setInput(e.target.value)}
@@ -279,7 +279,7 @@ export default function ChatBot() {
       ) : (
         <Button
           onClick={() => setIsOpen(true)}
-          className="rounded-full w-12 h-12 md:w-14 md:h-14 bg-[#0066FF] hover:bg-[#0052CC] transition-colors shadow-lg m-4 md:m-0 ml-auto"
+          className="rounded-full w-12 h-12 md:w-14 md:h-14 bg-[#0066FF] hover:bg-[#0052CC] transition-colors shadow-lg mx-4 mb-4 md:m-0 ml-auto"
         >
           <i className="fas fa-comments text-xl md:text-2xl text-white"></i>
         </Button>
