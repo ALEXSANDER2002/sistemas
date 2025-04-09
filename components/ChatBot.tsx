@@ -200,13 +200,13 @@ export default function ChatBot() {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-0 right-0 z-50 md:bottom-4 md:right-4">
       {isOpen ? (
         showFeedback ? (
           <ChatFeedback onClose={handleCloseFeedback} onSkip={handleSkipFeedback} />
         ) : (
-          <Card className="w-[400px] h-[600px] flex flex-col shadow-lg rounded-lg overflow-hidden">
-            <div className="bg-[#0066FF] p-4 flex items-center justify-between">
+          <Card className="w-full h-[100vh] md:w-[400px] md:h-[600px] flex flex-col shadow-lg md:rounded-lg overflow-hidden">
+            <div className="bg-[#0066FF] px-4 py-3 md:p-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
                   <i className="fas fa-headset text-[#0066FF]"></i>
@@ -214,28 +214,25 @@ export default function ChatBot() {
                 <span className="font-semibold text-white">Suporte CTIC</span>
               </div>
               <div className="flex gap-2">
-                <button className="text-white hover:text-gray-200">
-                  <i className="fas fa-chevron-down"></i>
-                </button>
                 <button 
                   onClick={handleClose}
-                  className="text-white hover:text-gray-200"
+                  className="text-white hover:text-gray-200 p-2"
                 >
-                  <i className="fas fa-times"></i>
+                  <i className="fas fa-times text-xl"></i>
                 </button>
               </div>
             </div>
             
-            <ScrollArea className="flex-1 p-4 bg-gray-50">
+            <ScrollArea className="flex-1 p-3 md:p-4 bg-gray-50">
               {messages.map(message => (
                 <div
                   key={message.id}
-                  className={`mb-4 flex ${
+                  className={`mb-3 md:mb-4 flex ${
                     message.sender === 'user' ? 'justify-end' : 'justify-start'
                   }`}
                 >
                   <div
-                    className={`max-w-[80%] rounded-lg p-3 ${
+                    className={`max-w-[85%] md:max-w-[80%] rounded-lg p-2.5 md:p-3 text-[0.9375rem] md:text-base ${
                       message.sender === 'user'
                         ? 'bg-[#0066FF] text-white'
                         : 'bg-white shadow-sm'
@@ -248,8 +245,8 @@ export default function ChatBot() {
                 </div>
               ))}
               {isLoading && (
-                <div className="flex justify-start mb-4">
-                  <div className="bg-white shadow-sm rounded-lg p-3">
+                <div className="flex justify-start mb-3 md:mb-4">
+                  <div className="bg-white shadow-sm rounded-lg p-2.5 md:p-3">
                     <div className="flex gap-1">
                       <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
                       <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
@@ -261,19 +258,20 @@ export default function ChatBot() {
               <div ref={messagesEndRef} />
             </ScrollArea>
 
-            <div className="p-4 bg-white border-t flex gap-2">
+            <div className="p-3 md:p-4 bg-white border-t flex gap-2 sticky bottom-0">
               <Input
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyPress={e => e.key === 'Enter' && handleSendMessage()}
                 placeholder="Digite sua mensagem..."
-                className="flex-1"
+                className="flex-1 text-[0.9375rem] md:text-base"
               />
               <Button 
                 onClick={handleSendMessage}
-                className="bg-[#0066FF] hover:bg-[#0052CC]"
+                className="bg-[#0066FF] hover:bg-[#0052CC] px-3 md:px-4"
               >
-                Enviar
+                <span className="hidden md:inline">Enviar</span>
+                <i className="fas fa-paper-plane md:hidden"></i>
               </Button>
             </div>
           </Card>
@@ -281,9 +279,9 @@ export default function ChatBot() {
       ) : (
         <Button
           onClick={() => setIsOpen(true)}
-          className="rounded-full w-14 h-14 bg-[#0066FF] hover:bg-[#0052CC] transition-colors shadow-lg"
+          className="rounded-full w-12 h-12 md:w-14 md:h-14 bg-[#0066FF] hover:bg-[#0052CC] transition-colors shadow-lg m-4 md:m-0 ml-auto"
         >
-          <i className="fas fa-comments text-2xl text-white"></i>
+          <i className="fas fa-comments text-xl md:text-2xl text-white"></i>
         </Button>
       )}
     </div>

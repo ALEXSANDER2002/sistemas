@@ -20,27 +20,39 @@ export default function ChatFeedback({ onClose, onSkip }: ChatFeedbackProps) {
   }
 
   return (
-    <Card className="w-[400px] p-6 space-y-6">
+    <Card className="w-full h-[100vh] md:w-[400px] md:h-auto p-4 md:p-6 space-y-6 flex flex-col md:rounded-lg">
       <div className="space-y-4">
-        <h3 className="text-lg font-medium">Você ficou satisfeito com o atendimento?</h3>
-        <div className="flex gap-2 justify-center">
-          {[1, 2, 3, 4, 5].map((value) => (
-            <button
-              key={value}
-              onClick={() => setRating(value)}
-              className={`w-10 h-10 rounded-full border ${
-                rating === value
-                  ? 'bg-[#0066FF] text-white border-[#0066FF]'
-                  : 'border-gray-300 hover:border-[#0066FF]'
-              } transition-colors`}
-            >
-              {value}
-            </button>
-          ))}
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-medium">Feedback</h3>
+          <button 
+            onClick={onSkip}
+            className="text-gray-400 hover:text-gray-600 p-1"
+          >
+            <i className="fas fa-times text-xl"></i>
+          </button>
         </div>
-        <div className="flex justify-between text-sm text-gray-500">
-          <span>Insatisfeito</span>
-          <span>Muito satisfeito</span>
+
+        <div>
+          <h3 className="text-lg font-medium mb-3">Você ficou satisfeito com o atendimento?</h3>
+          <div className="flex gap-2 justify-center">
+            {[1, 2, 3, 4, 5].map((value) => (
+              <button
+                key={value}
+                onClick={() => setRating(value)}
+                className={`w-10 h-10 rounded-full border ${
+                  rating === value
+                    ? 'bg-[#0066FF] text-white border-[#0066FF]'
+                    : 'border-gray-300 hover:border-[#0066FF]'
+                } transition-colors`}
+              >
+                {value}
+              </button>
+            ))}
+          </div>
+          <div className="flex justify-between text-sm text-gray-500 mt-2">
+            <span>Insatisfeito</span>
+            <span>Muito satisfeito</span>
+          </div>
         </div>
       </div>
 
@@ -49,7 +61,7 @@ export default function ChatFeedback({ onClose, onSkip }: ChatFeedbackProps) {
         <div className="flex gap-4 justify-center">
           <button
             onClick={() => setIsEasyToUse(false)}
-            className={`p-2 rounded-full border ${
+            className={`p-3 rounded-full border ${
               isEasyToUse === false
                 ? 'bg-[#0066FF] text-white border-[#0066FF]'
                 : 'border-gray-300 hover:border-[#0066FF]'
@@ -59,7 +71,7 @@ export default function ChatFeedback({ onClose, onSkip }: ChatFeedbackProps) {
           </button>
           <button
             onClick={() => setIsEasyToUse(true)}
-            className={`p-2 rounded-full border ${
+            className={`p-3 rounded-full border ${
               isEasyToUse === true
                 ? 'bg-[#0066FF] text-white border-[#0066FF]'
                 : 'border-gray-300 hover:border-[#0066FF]'
@@ -70,17 +82,17 @@ export default function ChatFeedback({ onClose, onSkip }: ChatFeedbackProps) {
         </div>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-2 flex-1">
         <h3 className="text-lg font-medium">Comentários adicionais (opcional)</h3>
         <Textarea
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           placeholder="Compartilhe sua experiência ou sugestões..."
-          className="w-full h-24 resize-none"
+          className="w-full resize-none flex-1 min-h-[120px]"
         />
       </div>
 
-      <div className="flex gap-2 justify-end">
+      <div className="flex gap-2 justify-end mt-auto pt-4">
         <Button
           onClick={onSkip}
           variant="outline"
