@@ -2,6 +2,7 @@ import './globals.css'
 // O CSS de alto contraste será importado condicionalmente no componente
 import './styles/vlibras.css'
 import './styles/mobile.css'
+import '@/app/styles/chatbot.css'
 import { HighContrastProvider } from '@/components/HighContrastContext'
 import { ThemeProvider } from "@/components/theme-provider"
 import VLibrasManager from '@/components/VLibrasManager'
@@ -9,6 +10,7 @@ import { externalLinks } from './config/external-links'
 import type { Metadata } from "next"
 import Script from 'next/script'
 import DynamicHighContrastCSS from '@/components/DynamicHighContrastCSS'
+import ChatBot from '@/components/ChatBot'
 
 export const metadata: Metadata = {
   title: 'UNIFESSPA - Sistemas Institucionais',
@@ -42,6 +44,7 @@ export default function RootLayout({
             <DynamicHighContrastCSS />
             {children}
             <VLibrasManager />
+            <ChatBot />
           </ThemeProvider>
         </HighContrastProvider>
       </body>
