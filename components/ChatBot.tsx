@@ -29,15 +29,15 @@ const responses: ChatResponse[] = [
 📋 Passo a Passo:
 
 1️⃣ Acesse o portal de senhas:
-   <a href="https://senha.unifesspa.edu.br" target="_blank" style="color: #0066FF; text-decoration: underline;">senha.unifesspa.edu.br</a>
+<a href="https://senha.unifesspa.edu.br" target="_blank" style="color: #0066FF; text-decoration: underline;">senha.unifesspa.edu.br</a>
 
-2️⃣ Digite seu usuário institucional
-   (mesmo do e-mail @unifesspa.edu.br)
+2️⃣ Digite seu usuário institucional:
+(mesmo do e-mail @unifesspa.edu.br)
 
 3️⃣ Siga as instruções para redefinição:
-   • Receba o código de verificação
-   • Crie uma nova senha
-   • Confirme a alteração
+• Receba o código de verificação
+• Crie uma nova senha
+• Confirme a alteração
 
 ⚠️ Importante:
 • A senha deve ter no mínimo 8 caracteres
@@ -54,11 +54,11 @@ Abra um chamado em: <a href="https://helpdesk.unifesspa.edu.br" target="_blank" 
 📋 Como Acessar:
 
 1️⃣ Acesse o Outlook:
-   <a href="https://outlook.office.com" target="_blank" style="color: #0066FF; text-decoration: underline;">outlook.office.com</a>
+<a href="https://outlook.office.com" target="_blank" style="color: #0066FF; text-decoration: underline;">outlook.office.com</a>
 
 2️⃣ Use suas credenciais:
-   • Email: seu.usuario@unifesspa.edu.br
-   • Senha: sua senha institucional
+• Email: seu.usuario@unifesspa.edu.br
+• Senha: sua senha institucional
 
 ⚙️ Configurações Recomendadas:
 • Outlook Web App (OWA)
@@ -80,12 +80,12 @@ Abra um chamado em: <a href="https://helpdesk.unifesspa.edu.br" target="_blank" 
 📋 Como Conectar:
 
 1️⃣ Selecione a rede:
-   • Nome: eduroam
-   • Segurança: WPA2-Enterprise
+• Nome: eduroam
+• Segurança: WPA2-Enterprise
 
 2️⃣ Credenciais:
-   • Usuário: seu.email@unifesspa.edu.br
-   • Senha: sua senha institucional
+• Usuário: seu.email@unifesspa.edu.br
+• Senha: sua senha institucional
 
 ⚙️ Configurações Técnicas:
 • Método de autenticação: PEAP
@@ -94,8 +94,7 @@ Abra um chamado em: <a href="https://helpdesk.unifesspa.edu.br" target="_blank" 
 
 📍 Locais com Cobertura:
 • Todos os campi da Unifesspa
-• Áreas comuns
-• Salas de aula
+• Áreas comuns e salas de aula
 • Bibliotecas
 
 ❓ Dificuldades?
@@ -108,17 +107,17 @@ Acesse: <a href="https://ctic.unifesspa.edu.br/wifi" target="_blank" style="colo
 📋 Como Abrir um Chamado:
 
 1️⃣ Acesse o Helpdesk:
-   <a href="https://helpdesk.unifesspa.edu.br" target="_blank" style="color: #0066FF; text-decoration: underline;">helpdesk.unifesspa.edu.br</a>
+<a href="https://helpdesk.unifesspa.edu.br" target="_blank" style="color: #0066FF; text-decoration: underline;">helpdesk.unifesspa.edu.br</a>
 
 2️⃣ Faça login com suas credenciais institucionais
 
 3️⃣ Clique em "Novo Chamado"
 
 4️⃣ Preencha as informações:
-   • Categoria do serviço
-   • Descrição detalhada
-   • Prioridade
-   • Anexos (se necessário)
+• Categoria do serviço
+• Descrição detalhada
+• Prioridade
+• Anexos (se necessário)
 
 📊 Acompanhamento:
 • Verifique o status do chamado
@@ -138,25 +137,25 @@ Acesse: <a href="https://ctic.unifesspa.edu.br/wifi" target="_blank" style="colo
 📋 Passo a Passo:
 
 1️⃣ Acesse o SIGAA:
-   <a href="https://sigaa.unifesspa.edu.br" target="_blank" style="color: #0066FF; text-decoration: underline;">sigaa.unifesspa.edu.br</a>
+<a href="https://sigaa.unifesspa.edu.br" target="_blank" style="color: #0066FF; text-decoration: underline;">sigaa.unifesspa.edu.br</a>
 
 2️⃣ Clique em "Primeiro Acesso"
 
 3️⃣ Selecione "Discente"
 
 4️⃣ Preencha os dados solicitados:
-   • Número da matrícula
-   • CPF
-   • Data de nascimento
+• Número da matrícula
+• CPF
+• Data de nascimento
 
 5️⃣ Crie uma senha forte:
-   • Mínimo 8 caracteres
-   • Letras e números
-   • Caracteres especiais
+• Mínimo 8 caracteres
+• Letras e números
+• Caracteres especiais
 
 6️⃣ Confirme seu e-mail:
-   • Verifique sua caixa de entrada
-   • Clique no link de confirmação
+• Verifique sua caixa de entrada
+• Clique no link de confirmação
 
 📸 Passo a Passo Visual:
 
@@ -187,18 +186,18 @@ Acesse: <a href="https://helpdesk.unifesspa.edu.br/wiki-unifesspa/primeiro-acess
 📋 Como Configurar:
 
 1️⃣ Baixe o cliente OpenVPN:
-   • Versão compatível com seu sistema
-   • Instale seguindo as instruções
+• Versão compatível com seu sistema
+• Instale seguindo as instruções
 
 2️⃣ Solicite acesso:
-   • Acesse o Helpdesk
-   • Abra um chamado para VPN
-   • Aguarde a aprovação
+• Acesse o Helpdesk
+• Abra um chamado para VPN
+• Aguarde a aprovação
 
 3️⃣ Configure a conexão:
-   • Use as credenciais fornecidas
-   • Importe o arquivo de configuração
-   • Conecte-se à rede
+• Use as credenciais fornecidas
+• Importe o arquivo de configuração
+• Conecte-se à rede
 
 ⚠️ Requisitos:
 • Conexão estável com internet
@@ -215,17 +214,17 @@ Acesse: <a href="https://helpdesk.unifesspa.edu.br/wiki-unifesspa/primeiro-acess
 📋 Como Solicitar:
 
 1️⃣ Acesse o Helpdesk:
-   <a href="https://helpdesk.unifesspa.edu.br" target="_blank" style="color: #0066FF; text-decoration: underline;">helpdesk.unifesspa.edu.br</a>
+<a href="https://helpdesk.unifesspa.edu.br" target="_blank" style="color: #0066FF; text-decoration: underline;">helpdesk.unifesspa.edu.br</a>
 
 2️⃣ Abra um chamado:
-   • Categoria: Instalação de Software
-   • Descreva o software necessário
-   • Informe a justificativa
+• Categoria: Instalação de Software
+• Descreva o software necessário
+• Informe a justificativa
 
 3️⃣ Aguarde a análise:
-   • Verificação de licenças
-   • Compatibilidade do sistema
-   • Disponibilidade de instalação
+• Verificação de licenças
+• Compatibilidade do sistema
+• Disponibilidade de instalação
 
 ⚠️ Observações:
 • Softwares com licença institucional
@@ -277,23 +276,58 @@ function findBestResponse(message: string): string {
   const messageWords = normalizedMessage.split(/\s+/)
   
   let bestMatch = {
-    response: '❓ Não entendi sua pergunta.\n\nPosso ajudar com:\n• 🔑 Senha institucional\n• 📧 Email institucional\n• 📶 Rede WiFi (Eduroam)\n• 🎫 Abertura de chamados\n• 🎓 SIGAA\n• 🔒 VPN\n• 💻 Instalação de software\n• ⏰ Horário de atendimento\n\n🔍 Ou abra um chamado em:\nhelpdesk.unifesspa.edu.br',
+    response: `❓ Não entendi sua pergunta.
+
+Posso ajudar com:
+• 🔑 Senha institucional
+• 📧 Email institucional
+• 📶 Rede WiFi (Eduroam)
+• 🎫 Abertura de chamados
+• 🎓 SIGAA
+• 🔒 VPN
+• 💻 Instalação de software
+• ⏰ Horário de atendimento
+
+🔍 Ou abra um chamado em:
+helpdesk.unifesspa.edu.br`,
     score: 0
   }
 
   // Verificar saudações
   if (normalizedMessage.match(/^(oi|ola|eai|hello|hi|boa|bom|dia|tarde|noite)/)) {
-    return '👋 Olá! Sou o assistente virtual do CTIC Unifesspa.\n\nPosso ajudar com:\n• 🔑 Senha institucional\n• 📧 Email institucional\n• 📶 Rede WiFi (Eduroam)\n• 🎫 Abertura de chamados\n• 🎓 SIGAA\n• 🔒 VPN\n• 💻 Instalação de software\n\n❓ Como posso ajudar você hoje?'
+    return `👋 Olá! Sou o assistente virtual do CTIC Unifesspa.
+
+Posso ajudar com:
+• 🔑 Senha institucional
+• 📧 Email institucional
+• 📶 Rede WiFi (Eduroam)
+• 🎫 Abertura de chamados
+• 🎓 SIGAA
+• 🔒 VPN
+• 💻 Instalação de software
+
+❓ Como posso ajudar você hoje?`
   }
 
   // Verificar agradecimentos
   if (normalizedMessage.match(/(obrigado|obrigada|valeu|thanks|thank|agradecido|agradecida)/)) {
-    return '😊 De nada! Estou aqui para ajudar.\n\n❓ Precisa de mais informações?\nNão hesite em perguntar!\n\n🎫 Para problemas específicos:\nhelpdesk.unifesspa.edu.br'
+    return `😊 De nada! Estou aqui para ajudar.
+
+❓ Precisa de mais informações?
+Não hesite em perguntar!
+
+🎫 Para problemas específicos:
+helpdesk.unifesspa.edu.br`
   }
 
   // Verificar despedidas
   if (normalizedMessage.match(/(tchau|adeus|ate|bye|goodbye)/)) {
-    return '👋 Até mais!\n\n🎫 Lembre-se: você pode abrir um chamado a qualquer momento em:\nhelpdesk.unifesspa.edu.br\n\n😊 Tenha um ótimo dia!'
+    return `👋 Até mais!
+
+🎫 Lembre-se: você pode abrir um chamado a qualquer momento em:
+helpdesk.unifesspa.edu.br
+
+😊 Tenha um ótimo dia!`
   }
 
   responses.forEach(item => {
@@ -416,7 +450,7 @@ export default function ChatBot() {
         showFeedback ? (
           <ChatFeedback onClose={handleCloseFeedback} onSkip={handleSkipFeedback} />
         ) : (
-          <Card className="w-full h-[calc(100vh-4rem)] md:w-[400px] md:h-[600px] flex flex-col shadow-lg md:rounded-lg overflow-hidden">
+          <Card className="w-full h-[calc(100vh-4rem)] md:w-[700px] md:h-[calc(100vh-8rem)] max-h-[1000px] flex flex-col shadow-lg md:rounded-lg overflow-hidden">
             <div className="bg-[#0066FF] px-4 py-3 md:p-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
@@ -443,17 +477,17 @@ export default function ChatBot() {
                   }`}
                 >
                   <div
-                    className={`max-w-[85%] md:max-w-[80%] rounded-lg p-2.5 md:p-3 text-[0.9375rem] md:text-base ${
+                    className={`max-w-[95%] md:max-w-[98%] rounded-lg p-2.5 md:p-3 text-[0.9375rem] md:text-base ${
                       message.sender === 'user'
                         ? 'bg-[#0066FF] text-white'
                         : 'bg-white shadow-sm'
                     }`}
                   >
                     {message.sender === 'bot' && message.content.includes('<img') ? (
-                      <div dangerouslySetInnerHTML={{ __html: message.content }} />
+                      <div dangerouslySetInnerHTML={{ __html: message.content }} className="space-y-4" />
                     ) : (
                       message.content.split('\n').map((line, i) => (
-                        <div key={i}>{line}</div>
+                        <div key={i} className="whitespace-pre-wrap break-words leading-relaxed py-0.5">{line}</div>
                       ))
                     )}
                   </div>
