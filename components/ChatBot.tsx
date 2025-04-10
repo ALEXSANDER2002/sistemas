@@ -162,12 +162,12 @@ Acesse: <a href="https://ctic.unifesspa.edu.br/wifi" target="_blank" style="colo
 <div style="display: flex; flex-direction: column; gap: 20px; margin: 15px 0;">
   <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
     <h3 style="margin: 0 0 10px 0; color: #0066FF; font-size: 16px;">1. Tela Inicial</h3>
-    <img src="/800px-Tela_Cadastro_Aluno-1.png" alt="Tela Inicial" style="width: 100%; max-width: 600px; height: auto; border-radius: 4px;" />
+    <img src="/800px-Cadastro_Aluno-1.png" alt="Tela Inicial" style="width: 100%; max-width: 600px; height: auto; border-radius: 4px;" />
   </div>
 
   <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
     <h3 style="margin: 0 0 10px 0; color: #0066FF; font-size: 16px;">2. Tela de Cadastro</h3>
-    <img src="/800px-Tela_Cadastro_Aluno-2.png" alt="Tela de Cadastro" style="width: 100%; max-width: 600px; height: auto; border-radius: 4px;" />
+    <img src="/800px-Tela_Cadastro_Aluno-1.png" alt="Tela de Cadastro" style="width: 100%; max-width: 600px; height: auto; border-radius: 4px;" />
   </div>
 
   <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -364,6 +364,25 @@ helpdesk.unifesspa.edu.br
   return bestMatch.score >= 0.7 ? bestMatch.response : bestMatch.response
 }
 
+const styles = `
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+`;
+
 export default function ChatBot() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
@@ -395,6 +414,18 @@ export default function ChatBot() {
       }, 1500)
     }
   }, [isOpen])
+
+  useEffect(() => {
+    // Adiciona os estilos ao head do documento
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = styles;
+    document.head.appendChild(styleSheet);
+
+    // Cleanup
+    return () => {
+      document.head.removeChild(styleSheet);
+    };
+  }, []);
 
   const handleSendMessage = () => {
     if (!input.trim()) return
@@ -528,9 +559,10 @@ export default function ChatBot() {
       ) : (
         <Button
           onClick={() => setIsOpen(true)}
-          className="rounded-full w-12 h-12 md:w-14 md:h-14 bg-[#0066FF] hover:bg-[#0052CC] transition-colors shadow-lg mx-4 mb-4 md:m-0 ml-auto"
+          className="rounded-full w-12 h-12 md:w-14 md:h-14 bg-[#0066FF] hover:bg-[#0052CC] transition-all duration-300 shadow-lg mx-4 mb-4 md:m-0 ml-auto hover:shadow-[0_0_15px_rgba(0,102,255,0.5)] group relative overflow-hidden"
         >
-          <i className="fas fa-comments text-xl md:text-2xl text-white"></i>
+          <i className="fas fa-comments text-xl md:text-2xl text-white transition-transform duration-300 group-hover:rotate-12 relative z-10"></i>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0066FF] via-[#4D9AFF] to-[#0066FF] opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient"></div>
         </Button>
       )}
     </div>
