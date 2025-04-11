@@ -8,12 +8,16 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import ChatFeedback from './ChatFeedback'
 import stringSimilarity from 'string-similarity'
+import { MessageSquare, X, Send, ChevronRight, ChevronLeft } from 'lucide-react'
+import Image from 'next/image'
 
 interface Message {
   id: string
   content: string
   sender: 'user' | 'bot'
   timestamp: Date
+  steps?: string[]
+  currentStep?: number
 }
 
 interface ChatResponse {
@@ -384,9 +388,9 @@ const styles = `
 `;
 
 export default function ChatBot() {
+  const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
-  const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [showFeedback, setShowFeedback] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -398,6 +402,125 @@ export default function ChatBot() {
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+
+  const handleSendMessage = () => {
+    if (!input.trim()) return
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      content: input,
+      sender: 'user',
+      timestamp: new Date()
+    }
+
+    setMessages(prev => [...prev, userMessage])
+    setInput('')
+    setIsLoading(true)
+
+    // Simular resposta do bot
+    setTimeout(() => {
+      const botResponse = getBotResponse(input)
+      setMessages(prev => [...prev, botResponse])
+      setIsLoading(false)
+    }, 1500)
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSendMessage()
+    }
+  }
+
+  const handleNextStep = (messageIndex: number) => {
+    setMessages(prev => {
+      const newMessages = [...prev]
+      const message = newMessages[messageIndex]
+      if (message.steps && message.currentStep !== undefined) {
+        message.currentStep = Math.min(message.currentStep + 1, message.steps.length - 1)
+      }
+      return newMessages
+    })
+  }
+
+  const handlePrevStep = (messageIndex: number) => {
+    setMessages(prev => {
+      const newMessages = [...prev]
+      const message = newMessages[messageIndex]
+      if (message.steps && message.currentStep !== undefined) {
+        message.currentStep = Math.max(message.currentStep - 1, 0)
+      }
+      return newMessages
+    })
+  }
+
+  const handleClose = () => {
+    if (messages.length > 1) {
+      setShowFeedback(true)
+    } else {
+      setIsOpen(false)
+      setMessages([])
+    }
+  }
+
+  const handleCloseFeedback = () => {
+    setShowFeedback(false)
+    setIsOpen(false)
+    setMessages([])
+  }
+
+  const handleSkipFeedback = () => {
+    setShowFeedback(false)
+    setIsOpen(false)
+    setMessages([])
+  }
+
+  const getBotResponse = (userInput: string): Message => {
+    const lowerInput = userInput.toLowerCase()
+
+    if (lowerInput.includes('sigaa') || lowerInput.includes('primeiro acesso')) {
+      return {
+        id: (Date.now() + 1).toString(),
+        content: 'Vou te ajudar com o primeiro acesso ao SIGAA!',
+        sender: 'bot',
+        timestamp: new Date(),
+        steps: [
+          '1️⃣ Acesse o SIGAA através do link: https://sigaa.unifesspa.edu.br/sigaa/verTelaLogin.do',
+          '2️⃣ Na tela de login, clique em "Primeiro Acesso"',
+          '3️⃣ Preencha seus dados pessoais no formulário de cadastro',
+          '4️⃣ Após o cadastro, você receberá um e-mail de confirmação',
+          '5️⃣ Siga as instruções do e-mail para ativar sua conta',
+          '6️⃣ Faça login com seu CPF e senha cadastrados'
+        ],
+        currentStep: 0
+      }
+    }
+
+    if (lowerInput.includes('suap') || lowerInput.includes('acesso')) {
+      return {
+        id: (Date.now() + 1).toString(),
+        content: 'Vou te ajudar com o acesso ao SUAP!',
+        sender: 'bot',
+        timestamp: new Date(),
+        steps: [
+          '1️⃣ Acesse o SUAP através do link: https://suap.unifesspa.edu.br',
+          '2️⃣ Clique em "Primeiro Acesso"',
+          '3️⃣ Digite seu CPF e clique em "Enviar"',
+          '4️⃣ Siga as instruções enviadas para seu e-mail',
+          '5️⃣ Crie uma senha forte',
+          '6️⃣ Faça login com seu CPF e senha'
+        ],
+        currentStep: 0
+      }
+    }
+
+    return {
+      id: (Date.now() + 1).toString(),
+      content: 'Desculpe, não entendi sua pergunta. Você pode perguntar sobre:\n- Primeiro acesso ao SIGAA\n- Primeiro acesso ao SUAP\n- Outros sistemas institucionais',
+      sender: 'bot',
+      timestamp: new Date()
+    }
+  }
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
@@ -427,136 +550,9 @@ export default function ChatBot() {
     };
   }, []);
 
-  const handleSendMessage = () => {
-    if (!input.trim()) return
-
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      content: input,
-      sender: 'user',
-      timestamp: new Date()
-    }
-
-    setMessages(prev => [...prev, newMessage])
-    setInput('')
-    setIsLoading(true)
-
-    // Encontrar a melhor resposta para a mensagem do usuário
-    setTimeout(() => {
-      const botResponse: Message = {
-        id: (Date.now() + 1).toString(),
-        content: findBestResponse(input),
-        sender: 'bot',
-        timestamp: new Date()
-      }
-      setMessages(prev => [...prev, botResponse])
-      setIsLoading(false)
-    }, 1500)
-  }
-
-  const handleClose = () => {
-    if (messages.length > 1) {
-      setShowFeedback(true)
-    } else {
-      setIsOpen(false)
-      setMessages([])
-    }
-  }
-
-  const handleCloseFeedback = () => {
-    setShowFeedback(false)
-    setIsOpen(false)
-    setMessages([])
-  }
-
-  const handleSkipFeedback = () => {
-    setShowFeedback(false)
-    setIsOpen(false)
-    setMessages([])
-  }
-
   return (
     <div className="fixed bottom-0 right-0 z-50 md:bottom-4 md:right-4">
-      {isOpen ? (
-        showFeedback ? (
-          <ChatFeedback onClose={handleCloseFeedback} onSkip={handleSkipFeedback} />
-        ) : (
-          <Card className="w-full h-[calc(100vh-4rem)] md:w-[700px] md:h-[calc(100vh-8rem)] max-h-[1000px] flex flex-col shadow-lg md:rounded-lg overflow-hidden">
-            <div className="bg-[#0066FF] px-4 py-3 md:p-4 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                  <i className="fas fa-headset text-[#0066FF]"></i>
-                </div>
-                <span className="font-semibold text-white">Suporte CTIC</span>
-              </div>
-              <div className="flex gap-2">
-                <button 
-                  onClick={handleClose}
-                  className="text-white hover:text-gray-200 p-2"
-                >
-                  <i className="fas fa-times text-xl"></i>
-                </button>
-              </div>
-            </div>
-            
-            <ScrollArea className="flex-1 p-3 md:p-4 bg-gray-50">
-              {messages.map(message => (
-                <div
-                  key={message.id}
-                  className={`mb-3 md:mb-4 flex ${
-                    message.sender === 'user' ? 'justify-end' : 'justify-start'
-                  }`}
-                >
-                  <div
-                    className={`max-w-[95%] md:max-w-[98%] rounded-lg p-2.5 md:p-3 text-[0.9375rem] md:text-base ${
-                      message.sender === 'user'
-                        ? 'bg-[#0066FF] text-white'
-                        : 'bg-white shadow-sm'
-                    }`}
-                  >
-                    {message.sender === 'bot' && message.content.includes('<img') ? (
-                      <div dangerouslySetInnerHTML={{ __html: message.content }} className="space-y-4" />
-                    ) : (
-                      message.content.split('\n').map((line, i) => (
-                        <div key={i} className="whitespace-pre-wrap break-words leading-relaxed py-0.5">{line}</div>
-                      ))
-                    )}
-                  </div>
-                </div>
-              ))}
-              {isLoading && (
-                <div className="flex justify-start mb-3 md:mb-4">
-                  <div className="bg-white shadow-sm rounded-lg p-2.5 md:p-3">
-                    <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-                    </div>
-                  </div>
-                </div>
-              )}
-              <div ref={messagesEndRef} />
-            </ScrollArea>
-
-            <div className="p-3 md:p-4 bg-white border-t flex gap-2">
-              <Input
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                onKeyPress={e => e.key === 'Enter' && handleSendMessage()}
-                placeholder="Digite sua mensagem..."
-                className="flex-1 text-[0.9375rem] md:text-base"
-              />
-              <Button 
-                onClick={handleSendMessage}
-                className="bg-[#0066FF] hover:bg-[#0052CC] px-3 md:px-4"
-              >
-                <span className="hidden md:inline">Enviar</span>
-                <i className="fas fa-paper-plane md:hidden"></i>
-              </Button>
-            </div>
-          </Card>
-        )
-      ) : (
+      {!isOpen && (
         <Button
           onClick={() => setIsOpen(true)}
           className="rounded-full w-12 h-12 md:w-14 md:h-14 bg-[#0066FF] hover:bg-[#0052CC] transition-all duration-300 shadow-lg mx-4 mb-4 md:m-0 ml-auto hover:shadow-[0_0_15px_rgba(0,102,255,0.5)] group relative overflow-hidden"
@@ -564,6 +560,109 @@ export default function ChatBot() {
           <i className="fas fa-comments text-xl md:text-2xl text-white transition-transform duration-300 group-hover:rotate-12 relative z-10"></i>
           <div className="absolute inset-0 bg-gradient-to-r from-[#0066FF] via-[#4D9AFF] to-[#0066FF] opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient"></div>
         </Button>
+      )}
+
+      {isOpen && !showFeedback && (
+        <Card className="w-full h-[calc(100vh-4rem)] md:w-[700px] md:h-[calc(100vh-8rem)] max-h-[1000px] flex flex-col shadow-lg md:rounded-lg overflow-hidden">
+          <div className="bg-[#0066FF] px-4 py-3 md:p-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                <i className="fas fa-headset text-[#0066FF]"></i>
+              </div>
+              <span className="font-semibold text-white">Suporte CTIC</span>
+            </div>
+            <div className="flex gap-2">
+              <button 
+                onClick={handleClose}
+                className="text-white hover:text-gray-200 p-2"
+              >
+                <i className="fas fa-times text-xl"></i>
+              </button>
+            </div>
+          </div>
+          
+          <ScrollArea className="flex-1 p-3 md:p-4 bg-gray-50">
+            {messages.map((message, index) => (
+              <div
+                key={message.id}
+                className={`mb-3 md:mb-4 flex ${
+                  message.sender === 'user' ? 'justify-end' : 'justify-start'
+                }`}
+              >
+                <div
+                  className={`max-w-[95%] md:max-w-[98%] rounded-lg p-2.5 md:p-3 text-[0.9375rem] md:text-base ${
+                    message.sender === 'user'
+                      ? 'bg-[#0066FF] text-white'
+                      : 'bg-white shadow-sm'
+                  }`}
+                >
+                  {message.content.split('\n').map((line, i) => (
+                    <div key={i} className="whitespace-pre-wrap break-words leading-relaxed py-0.5">{line}</div>
+                  ))}
+                  {message.steps && message.currentStep !== undefined && (
+                    <div className="mt-2 p-2 bg-gray-50 rounded-lg">
+                      <div className="text-sm text-gray-700 mb-2">
+                        {message.steps[message.currentStep]}
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <button
+                          onClick={() => handlePrevStep(index)}
+                          disabled={message.currentStep === 0}
+                          className="p-1 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          <ChevronLeft size={16} />
+                        </button>
+                        <span className="text-xs text-gray-500">
+                          {message.currentStep + 1}/{message.steps.length}
+                        </span>
+                        <button
+                          onClick={() => handleNextStep(index)}
+                          disabled={message.currentStep === message.steps.length - 1}
+                          className="p-1 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          <ChevronRight size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+            {isLoading && (
+              <div className="flex justify-start mb-3 md:mb-4">
+                <div className="bg-white shadow-sm rounded-lg p-2.5 md:p-3">
+                  <div className="flex gap-1">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </ScrollArea>
+
+          <div className="p-3 md:p-4 bg-white border-t flex gap-2">
+            <Input
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Digite sua mensagem..."
+              className="flex-1 text-[0.9375rem] md:text-base"
+            />
+            <Button 
+              onClick={handleSendMessage}
+              className="bg-[#0066FF] hover:bg-[#0052CC] px-3 md:px-4"
+            >
+              <span className="hidden md:inline">Enviar</span>
+              <i className="fas fa-paper-plane md:hidden"></i>
+            </Button>
+          </div>
+        </Card>
+      )}
+
+      {showFeedback && (
+        <ChatFeedback onClose={handleCloseFeedback} onSkip={handleSkipFeedback} />
       )}
     </div>
   )

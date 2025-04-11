@@ -35,7 +35,7 @@ export default function RootLayout({
           crossOrigin={externalLinks.fontAwesome.crossOrigin}
           referrerPolicy={externalLinks.fontAwesome.referrerPolicy}
         />
-        <Script src="/vlibras-config.js" strategy="beforeInteractive" />
+        <script src="/vlibras-config.js" defer></script>
       </head>
       <body>
         <HighContrastProvider>
